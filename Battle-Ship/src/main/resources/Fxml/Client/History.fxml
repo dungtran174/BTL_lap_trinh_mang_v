@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="449.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="104.0" layoutY="93.0" maxWidth="476.0" minWidth="476.0" prefHeight="403.0" prefWidth="476.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" stylesheets="@../../Styles/History.css">
+         <children>
+            <HBox maxHeight="44.0" maxWidth="476.0" minHeight="44.0" minWidth="476.0" prefHeight="44.0" prefWidth="476.0">
+               <children>
+                  <Label prefHeight="44.0" prefWidth="39.0" text="#" styleClass="title-lable"/>
+                  <Label prefHeight="44.0" prefWidth="161.0" text="OPPONENT" styleClass="title-lable-name"/>
+                  <Label prefHeight="44.0" prefWidth="143.0" text="TIME" styleClass="title-lable-name"/>
+                  <Label prefHeight="44.0" prefWidth="71.0" text="RESULT" styleClass="title-lable-name"/>
+                  <Label prefHeight="44.0" prefWidth="59.0" text="POINT" styleClass="title-lable-name"/>
+               </children>
+            </HBox>
+            <Pane maxHeight="1.0" minHeight="1.0" prefHeight="1.0" prefWidth="200.0" styleClass="line-rank"/>
+            <ScrollPane maxWidth="476.0" minWidth="476.0" prefHeight="363.0" prefWidth="476.0">
+               <content>
+                  <VBox fx:id="VboxHistory" prefHeight="85.0" prefWidth="460.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

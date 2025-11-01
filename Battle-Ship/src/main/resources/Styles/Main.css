@@ -1,0 +1,139 @@
+@font-face {
+    font-family: 'JejuHallasan';
+    src: url('../Fonts/JejuHallasan-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'MetalMania';
+    src: url('../Fonts/MetalMania-Regular.ttf');
+}
+
+
+.anchor {
+    -fx-background-image:url('../Images/intro.gif');
+    -fx-background-size: cover;
+}
+
+.line-vbox {
+    -fx-background-color: rgba(81, 76, 76, 0.96);
+}
+
+.line-hbox{
+    -fx-background-color: rgba(81, 76, 76, 0.96);
+}
+
+.vbox-user {
+    -fx-background-color: rgba(198, 173, 173, 0);
+}
+
+.list-user {
+    -fx-background-color:  rgba(37, 36, 36, 0.96);
+}
+
+.title-list-user {
+    -fx-background-color: rgba(255, 255, 255, 0);
+}
+
+.text-lable {
+    -fx-text-fill: rgb(237, 86, 86);
+    -fx-font-size: 15px;
+    -fx-font-family: JejuHallasan;
+    -fx-font-weight: 700;
+}
+
+.menu-button-main{
+    -fx-background-color: rgba(255, 23, 23, 0);
+    -fx-text-fill: rgba(217, 223, 165, 0.7);
+    -fx-font-size: 14px;
+    -fx-font-family: JejuHallasan;
+    -fx-font-weight: 700;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.item-user-mini{
+    --fx-background-color: rgba(255, 23, 23, 0);
+    -fx-text-fill: rgba(217, 223, 165, 1);
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe Script Bold";
+}
+
+.menu-button-main:hover {
+    -fx-background-color: rgba(255, 23, 23, 0);
+    -fx-text-fill: rgba(234, 251, 2, 0.7);
+}
+
+.avatar-main-user {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-background-radius: 50%;
+
+
+}
+
+.button-avatar {
+    -fx-background-image: url(../Images/avata1.png);
+    -fx-background-radius: 50%;
+
+}
+
+.status {
+    -fx-background-color: rgb(96, 197, 142);
+    -fx-background-radius: 50%;
+
+}
+
+.blb_status{
+    -fx-text-fill: rgb(96, 197, 142);
+}
+
+.buttom-check{
+    -fx-background-color: rgba(255, 255, 255, 0);
+}
+
+
+.texhUserMain{
+    -fx-text-fill: rgb(234, 251, 2);
+}
+
+.tran{
+    -fx-background-color: rgba(255, 255, 255, 0);
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.userInvitePlayGame{
+    -fx-text-fill: rgb(251, 57, 57);
+    -fx-font-size: 11px;
+    -fx-font-family: JejuHallasan;
+}
+
+.itemsUserHome{
+    --fx-background-color: transparent;
+}
+
+.itemsUserHome:hover{
+    -fx-background-color: rgba(146, 250, 250, 0.2);
+}
+
+/* Tùy chỉnh thanh cuộn dọc của ScrollPane */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent; /* Nền trong suốt */
+    -fx-pref-width: 10px; /* Độ rộng của thanh cuộn dọc */
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(213, 183, 128, 0.31); /* Màu của nút cuộn */
+    -fx-background-radius: 5px; /* Bo tròn các góc của nút cuộn */
+}
+
+/* Tùy chỉnh khi nút cuộn được nhấn */
+.scroll-pane .scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(246, 192, 123, 0.67); /* Màu nút cuộn khi nhấn */
+}
+

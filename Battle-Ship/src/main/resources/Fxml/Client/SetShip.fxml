@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="516.0" prefWidth="773.0" stylesheets="@../../Styles/setShip.css.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="533.0" fitWidth="789.0" layoutX="-10.0" nodeOrientation="INHERIT" opacity="0.91" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../Images/intro.gif" />
+         </image>
+      </ImageView>
+
+      <!-- GridPane cho bảng 10x10 -->
+      <GridPane id="board-ship" gridLinesVisible="true" layoutX="28.0" layoutY="70.0">
+         <!-- Thiết lập 10 cột với kích thước cố định 35px -->
+         <columnConstraints>
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+            <ColumnConstraints prefWidth="35.0" />
+         </columnConstraints>
+         <!-- Thiết lập 10 hàng với kích thước cố định 35px -->
+         <rowConstraints>
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+            <RowConstraints prefHeight="35.0" />
+         </rowConstraints>
+         <children>
+            <Pane id="00" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" />
+            <Pane id="10" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" />
+            <Pane id="20" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" />
+            <Pane id="30" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" />
+            <Pane id="40" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" />
+            <Pane id="50" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" />
+            <Pane id="60" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" />
+            <Pane id="70" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" />
+            <Pane id="80" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" />
+            <Pane id="90" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" />
+            <Pane id="01" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="1" />
+            <Pane id="11" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Pane id="21" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Pane id="31" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Pane id="41" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Pane id="51" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Pane id="61" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+            <Pane id="71" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+            <Pane id="81" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="1" />
+            <Pane id="91" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="1" />
+            <Pane id="02" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="2" />
+            <Pane id="12" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Pane id="22" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Pane id="32" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Pane id="42" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Pane id="52" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <Pane id="62" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+            <Pane id="72" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+            <Pane id="82" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="2" />
+            <Pane id="92" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="2" />
+            <Pane id="03" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="3" />
+            <Pane id="13" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Pane id="23" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Pane id="33" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Pane id="43" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Pane id="53" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <Pane id="63" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+            <Pane id="73" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+            <Pane id="83" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="3" />
+            <Pane id="93" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="3" />
+            <Pane id="04" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="4" />
+            <Pane id="14" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Pane id="24" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Pane id="34" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Pane id="44" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <Pane id="54" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+            <Pane id="64" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+            <Pane id="74" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="4" />
+            <Pane id="84" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="4" />
+            <Pane id="94" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="4" />
+            <Pane id="05" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="5" />
+            <Pane id="15" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Pane id="25" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Pane id="35" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+            <Pane id="45" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+            <Pane id="55" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+            <Pane id="65" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+            <Pane id="75" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="5" />
+            <Pane id="85" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="5" />
+            <Pane id="95" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="5" />
+            <Pane id="06" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="6" />
+            <Pane id="16" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Pane id="26" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Pane id="36" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+            <Pane id="46" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <Pane id="56" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+            <Pane id="66" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+            <Pane id="76" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="6" />
+            <Pane id="86" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="6" />
+            <Pane id="96" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="6" />
+            <Pane id="07" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="7" />
+            <Pane id="17" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Pane id="27" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Pane id="38" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+            <Pane id="48" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+            <Pane id="58" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+            <Pane id="37" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+            <Pane id="47" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+            <Pane id="57" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+            <Pane id="67" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="7" />
+            <Pane id="77" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="7" />
+            <Pane id="87" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="7" />
+            <Pane id="97" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="7" />
+            <Pane id="08" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="8" />
+            <Pane id="18" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Pane id="28" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <Pane id="68" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="8" />
+            <Pane id="78" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="8" />
+            <Pane id="88" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="8" />
+            <Pane id="98" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="8" />
+            <Pane id="09" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.rowIndex="9" />
+            <Pane id="19" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Pane id="29" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+            <Pane id="39" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+            <Pane id="49" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+            <Pane id="59" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="5" GridPane.rowIndex="9" />
+            <Pane id="69" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="6" GridPane.rowIndex="9" />
+            <Pane id="79" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="7" GridPane.rowIndex="9" />
+            <Pane id="89" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="8" GridPane.rowIndex="9" />
+            <Pane id="99" opacity="0.9" prefHeight="200.0" prefWidth="200.0" styleClass="grid-cell" GridPane.columnIndex="9" GridPane.rowIndex="9" />
+         </children>
+      </GridPane>
+      <VBox layoutX="400.0" layoutY="70.0" opacity="0.9" prefHeight="200.0" prefWidth="177.0" styleClass="title-ship-stack">
+         <children>
+            <Text fill="#303030" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Ship" textAlignment="CENTER" wrappingWidth="158.93673706054688">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <ImageView id="ship2" fitHeight="32.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/ship2.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView id="ship3-1" fitHeight="32.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/ship3.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView id="ship3-2" fitHeight="32.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/ship3.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView id="ship4" fitHeight="32.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/ship4.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView id="ship5" fitHeight="32.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/ship5.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="2.0" />
+               </VBox.margin>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets left="8.0" />
+         </padding>
+      </VBox>
+      <VBox layoutX="399.0" layoutY="306.0" opacity="0.92" prefHeight="59.0" prefWidth="178.0" styleClass="ship-stack">
+         <children>
+            <RadioButton id="horizontal" mnemonicParsing="false" selected="true" styleClass="hor" text="Horizontal">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="30.0" top="5.0" />
+               </VBox.margin></RadioButton>
+            <RadioButton id="vertical" mnemonicParsing="false" prefHeight="24.0" prefWidth="134.0" styleClass="ver" text="Vertical">
+               <VBox.margin>
+                  <Insets left="30.0" />
+               </VBox.margin></RadioButton>
+         </children></VBox>
+      <VBox layoutX="595.0" layoutY="70.0" prefHeight="200.0" prefWidth="160.0" styleClass="ship-stack">
+         <children>
+            <Button id="readyBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="77.0" styleClass="ready" text="Ready">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="45.0" top="25.0" />
+               </VBox.margin></Button>
+            <Button id="resetBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="76.0" styleClass="reset" text="Reset">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="45.0" />
+               </VBox.margin></Button>
+            <Button id="randomBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="73.0" styleClass="random" text="Random">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="45.0" />
+               </VBox.margin></Button>
+            <Button id="exitBtn" layoutX="10.0" layoutY="61.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="74.0" styleClass="exit" text="Exit">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="45.0" />
+               </VBox.margin></Button>
+         </children></VBox>
+      <HBox layoutX="190.0" layoutY="445.0" opacity="0.81" prefHeight="59.0" prefWidth="358.0" style="-fx-background-color: lightblue; -fx-border-radius: 10px;">
+         <children>
+            <Label id="message" prefHeight="66.0" prefWidth="373.0" style="-fx-border-radius: 4px;" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <Circle fill="#a0c2e1" layoutX="675.0" layoutY="336.0" opacity="0.84" radius="37.0" stroke="BLACK" strokeType="INSIDE" styleClass="timer-circle" />
+      <Label id="clock" alignment="CENTER" ellipsisString="" layoutX="643.0" layoutY="306.0" prefHeight="59.0" prefWidth="64.0" styleClass="timer-label" textAlignment="CENTER" textFill="#cccccc">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+
+   </children>
+</AnchorPane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<HBox maxWidth="237.0" minWidth="237.0" prefHeight="41.0" prefWidth="237.0" stylesheets="@../../Styles/Main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="itemsUserHome">
+   <children>
+      <AnchorPane prefHeight="41.0" prefWidth="206.0">
+         <children>
+            <Circle fx:id="circleStatus" fill="#c6adad" layoutX="23.0" layoutY="21.0" radius="17.0" stroke="#40db0d" strokeType="INSIDE" strokeWidth="2.0" styleClass="info-userMain" />
+            <Label fx:id="statusItem" layoutX="47.0" layoutY="19.0" prefHeight="24.0" prefWidth="105.0" text="Online">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <Label fx:id="usernameItem" layoutX="47.0" layoutY="-1.0" prefHeight="24.0" prefWidth="133.0" text="Vu Xuan Thinh" styleClass="item-user-mini"/>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="41.0" prefWidth="67.0">
+         <children>
+            <Button fx:id="buttonInvite" layoutX="6.0" layoutY="1.0" minWidth="46.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="46.0" styleClass="buttom-check">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Images/plus.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>

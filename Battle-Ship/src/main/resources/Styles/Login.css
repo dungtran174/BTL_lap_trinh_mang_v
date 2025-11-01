@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'JejuHallasan';
+    src: url('../Fonts/JejuHallasan-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'MetalMania';
+    src: url('../Fonts/MetalMania-Regular.ttf');
+}
+
+
+.anchor {
+    -fx-background-image:url('../Images/Frame5.png');
+    -fx-background-size: cover;
+}
+
+.text-input {
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-color: #B3EEA5A5;
+    -fx-border-radius: 5;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-font-size: 12px;
+}
+
+.text-input:focused {
+    -fx-border-color: #385c30;
+    -fx-border-width: 2;
+}
+
+.input-label {
+    -fx-text-fill: #aa5a42;
+}
+
+.err{
+    -fx-text-fill: #5c0000;
+    -fx-font-size: 12px;
+}
+
+.login-button {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+
+}
+
+.login-button:hover {
+    -fx-background-color:rgba(255, 255, 255, 0.8);
+}
+
+
+.signup-button {
+    -fx-background-color: rgba(255, 23, 23, 0);
+    -fx-text-fill: rgba(44, 64, 53, 0.7);
+    -fx-font-size: 16px;
+    -fx-font-family: JejuHallasan;
+}
+
+
+.signup-button:hover {
+    -fx-background-color: rgba(255, 23, 23, 0);
+    -fx-text-fill: rgba(29, 43, 35, 0.9);
+}

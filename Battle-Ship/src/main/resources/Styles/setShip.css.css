@@ -1,0 +1,86 @@
+/* CSS cho ô trong GridPane */
+.grid-cell {
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+    -fx-background-color: lightblue; /* Màu nền cho ô */
+}
+.ship-stack {
+    -fx-background-color: lightblue;
+}
+.title-ship-stack{
+    -fx-background-color: lightblue;
+}
+.ready{
+    -fx-margin: 5px 5px;
+    -fx-padding: 5px 10px;
+    -fx-background-color: #4CAF50; /* Màu xanh lá */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-text-transform: uppercase; 
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 1, 1);
+}
+.ready:hover{
+    -fx-background-color: #45a049; /* Màu xanh đậm khi hover */
+}
+
+.reset{
+    -fx-padding: 5px 10px;
+    -fx-background-color: #f44336; /* Màu đỏ */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-text-transform: uppercase; /* Chữ in hoa */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 1, 1);
+}
+
+.reset:hover{
+     -fx-background-color: #e53935; /* Màu đỏ đậm khi hover */
+}
+
+.random{
+    -fx-padding: 5px 10px;
+    -fx-background-color: #2196F3; /* Màu xanh dương */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-text-transform: uppercase; /* Chữ in hoa */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 1, 1);
+}
+.random:hover{
+    -fx-background-color: #1e88e5;
+}
+
+.exit{
+    -fx-padding: 5px 10px;
+    -fx-background-color: #607d8b; 
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-text-transform: uppercase; 
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 1, 1)
+}
+.exit:hover{
+    -fx-background-color: #455a64;
+}
+
+.checkbox:hover{
+    -fx-background-color: #e8f5e9;
+    -fx-cursor: pointer;
+}
+
+.checkbox:selected {
+    -fx-border-color: #388e3c; 
+    -fx-text-fill: white; 
+}
+.timer-circle {
+    -fx-fill: linear-gradient(to bottom, #2196f3, #1976d2); /* Gradient xanh dương */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 5); /* Đổ bóng */
+    -fx-stroke: #0d47a1; /* Viền xanh đậm */
+    -fx-stroke-width: 4; /* Độ dày của viền */
+}

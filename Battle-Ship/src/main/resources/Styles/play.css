@@ -1,0 +1,77 @@
+/* styles.css */
+.exit-button {
+    -fx-background-color: #ff5555;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #ff2222;
+    -fx-border-width: 2px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);
+}
+
+/* Hiệu ứng khi di chuột qua nút */
+.exit-button:hover {
+    -fx-background-color: #ff4444;
+    -fx-border-color: #ff0000;
+}
+
+/* Hiệu ứng khi nhấn nút */
+.exit-button:pressed {
+    -fx-background-color: #cc0000;
+    -fx-effect: none;
+}
+
+/* styles.css */
+/* Nhãn "Your Turn" */
+.label-your-turn {
+    -fx-background-color: #4caf50; /* Màu xanh lá để biểu thị trạng thái của bạn */
+    -fx-text-fill: white; /* Màu chữ trắng để tương phản */
+    -fx-font-size: 16px; /* Cỡ chữ lớn hơn */
+    -fx-font-weight: bold; /* Chữ đậm */
+    -fx-padding: 10 20; /* Khoảng cách bên trong nhãn */
+    -fx-border-radius: 10; /* Góc bo tròn */
+    -fx-background-radius: 10; /* Góc bo tròn cho nền */
+    -fx-border-color: #388e3c; /* Viền xanh đậm hơn */
+    -fx-border-width: 2px; /* Độ dày của viền */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 4); /* Đổ bóng */
+}
+
+/* Nhãn "Enemy Turn" */
+.label-enemy-turn {
+    -fx-background-color: #f44336; /* Màu đỏ để biểu thị trạng thái của đối thủ */
+    -fx-text-fill: white; /* Màu chữ trắng để tương phản */
+    -fx-font-size: 16px; /* Cỡ chữ lớn hơn */
+    -fx-font-weight: bold; /* Chữ đậm */
+    -fx-padding: 10 20; /* Khoảng cách bên trong nhãn */
+    -fx-border-radius: 10; /* Góc bo tròn */
+    -fx-background-radius: 10; /* Góc bo tròn cho nền */
+    -fx-border-color: #d32f2f; /* Viền đỏ đậm hơn */
+    -fx-border-width: 2px; /* Độ dày của viền */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 4); /* Đổ bóng */
+}
+
+/* Hiệu ứng khi di chuột qua nhãn */
+.label-your-turn:hover,
+.label-enemy-turn:hover {
+    -fx-scale-x: 1.1; /* Phóng to một chút */
+    -fx-scale-y: 1.1;
+    -fx-cursor: hand; /* Hiển thị con trỏ dạng tay */
+}
+.timer-circle {
+    -fx-fill: linear-gradient(to bottom, #2196f3, #1976d2); /* Gradient xanh dương */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 5); /* Đổ bóng */
+    -fx-stroke: #0d47a1; /* Viền xanh đậm */
+    -fx-stroke-width: 4; /* Độ dày của viền */
+}
+
+/* Nhãn (Label) bên trong vòng tròn */
+.timer-label {
+    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-font-size: 16px; /* Kích thước chữ */
+    -fx-font-weight: bold; /* Chữ đậm */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 5, 0.3, 0, 2); /* Đổ bóng cho chữ */
+}

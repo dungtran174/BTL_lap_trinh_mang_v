@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="45.0" maxWidth="460.0" minHeight="45.0" minWidth="460.0" prefHeight="45.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox fx:id="HBoxItemHistory" maxHeight="44.0" maxWidth="460.0" minHeight="44.0" minWidth="460.0" prefHeight="44.0" prefWidth="460.0" styleClass="hBox-ItemHistory" stylesheets="@../../Styles/History.css">
+         <children>
+            <Label fx:id="lblSTT" maxHeight="44.0" minHeight="44.0" prefHeight="44.0" prefWidth="39.0" styleClass="lblItemSttHistory" text="#" />
+            <Label fx:id="lblOpponent" maxHeight="44.0" minHeight="44.0" prefHeight="44.0" prefWidth="161.0" styleClass="lblItemUserHistory" text="OPPONENT" />
+            <Label fx:id="lblTime" maxHeight="44.0" minHeight="44.0" prefHeight="44.0" prefWidth="142.0" styleClass="lblItemHistory" text="TIME" />
+            <Label fx:id="lblResult" maxHeight="44.0" minHeight="44.0" prefHeight="44.0" prefWidth="68.0" styleClass="lblItemHistory" text="RESULT" />
+            <Label fx:id="lblPointChange" maxHeight="44.0" minHeight="44.0" prefHeight="44.0" prefWidth="41.0" styleClass="lblItemSttHistory" text="POINT" />
+         </children>
+      </HBox>
+      <Pane maxHeight="1.0" maxWidth="460.0" minHeight="1.0" minWidth="460.0" prefHeight="1.0" prefWidth="460.0" styleClass="line" />
+   </children>
+</VBox>
