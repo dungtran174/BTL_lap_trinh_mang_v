@@ -14,9 +14,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 import shared.dto.ObjectWrapper;
 import javafx.application.Platform;
 import shared.dto.PlayerHistory;
@@ -667,6 +674,67 @@ public class MainFrm {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    public void openSceneWithNotification(String leftPlayerUsername) {
+        openScene(); // Mở scene như bình thường
+        
+        // Hiển thị thông báo sau khi scene đã load
+        Platform.runLater(() -> {
+            try {
+                // Đợi một chút để scene load xong
+                Timeline delay = new Timeline(new KeyFrame(Duration.millis(300), e -> {
+                    showNotification("Đối thủ " + leftPlayerUsername + " đã rời khỏi trận");
+                }));
+                delay.play();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+    
+    private void showNotification(String message) {
+        Platform.runLater(() -> {
+            try {
+                // Tạo notification popup
+                Stage notificationStage = new Stage();
+                notificationStage.initStyle(StageStyle.UNDECORATED);
+                notificationStage.initModality(Modality.NONE);
+                
+                VBox content = new VBox(10);
+                content.setStyle("-fx-background-color: rgba(244, 67, 54, 0.95); -fx-background-radius: 10px; -fx-padding: 15px 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3);");
+                
+                Label messageLabel = new Label(message);
+                messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;");
+                messageLabel.setMaxWidth(300);
+                
+                content.getChildren().add(messageLabel);
+                
+                javafx.scene.Scene notificationScene = new javafx.scene.Scene(content);
+                notificationScene.setFill(Color.TRANSPARENT);
+                notificationStage.setScene(notificationScene);
+                
+                // Đặt vị trí ở góc trên bên phải
+                notificationStage.setX(stage.getX() + stage.getWidth() - 350);
+                notificationStage.setY(stage.getY() + 50);
+                
+                notificationStage.show();
+                
+                // Fade out và đóng sau 3 giây
+                FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), content);
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+                
+                Timeline closeTimer = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
+                    fadeOut.play();
+                    fadeOut.setOnFinished(event -> notificationStage.close());
+                }));
+                closeTimer.play();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

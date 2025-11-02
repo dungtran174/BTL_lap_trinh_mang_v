@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="998.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane prefHeight="516.0" prefWidth="277.0" styleClass="anchor" stylesheets="@../../Styles/Login.css">
          <children>
@@ -73,9 +73,9 @@
          </children>
       </AnchorPane>
 
-      <AnchorPane prefHeight="500.0" prefWidth="721.0">
+      <AnchorPane prefHeight="516.0" prefWidth="721.0">
          <children>
-            <ImageView fitHeight="516.0" fitWidth="773.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="516.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="false">
                <image>
                   <Image url="@../../Images/big.png" />
                </image></ImageView>

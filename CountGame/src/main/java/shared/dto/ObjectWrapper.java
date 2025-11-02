@@ -126,6 +126,11 @@ public class ObjectWrapper implements Serializable {
     // server gửi kết thúc game (tổng điểm, người thắng)
     public static final int SERVER_END_IMAGE_QUIZ_GAME = 65;
     
+    // client gửi request rời trận giữa chừng
+    public static final int CLIENT_LEAVE_GAME = 66;
+    // server gửi thông báo người chơi đã rời trận và quay về màn hình chính
+    public static final int SERVER_PLAYER_LEFT_GAME = 67;
+    
     private int performative;
     private Object data;
 

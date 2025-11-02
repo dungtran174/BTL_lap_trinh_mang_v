@@ -88,6 +88,11 @@ public class ClientListening extends Thread {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
                                 }
                                 break;
+                            case ObjectWrapper.SERVER_PLAYER_LEFT_GAME:
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
+                                break;
                         }
 
                     }

@@ -194,6 +194,51 @@ public class ServerProcessing extends Thread {
                                 }
                             }
                             break;
+                        case ObjectWrapper.CLIENT_LEAVE_GAME:
+                            // Handle player leaving game mid-match
+                            if (inGame && enemy != null && imageQuizGameCtr != null) {
+                                System.out.println("Server: " + this.username + " is leaving the game mid-match");
+                                
+                                // Stop all timers
+                                stopAllTimers();
+                                enemy.stopAllTimers();
+                                
+                                // Update AFK for the player who left (trừ 1 điểm)
+                                playerDAO.updateAfk(this.username);
+                                
+                                // Update win for the opponent (cộng 1 điểm)
+                                playerDAO.updateWin(enemy.username);
+                                
+                                // Update loss for the player who left
+                                playerDAO.updateLoss(this.username);
+                                
+                                // Create match record
+                                Match match = new Match(enemy.username, this.username, "win", "afk", 1, -1);
+                                matchDAO.updateMatchResult(match);
+                                
+                                // Reset game state
+                                imageQuizGameCtr = null;
+                                enemy.imageQuizGameCtr = null;
+                                
+                                // Set results
+                                this.result = "afk";
+                                enemy.result = "win";
+                                
+                                // Send notification to both players to return to main screen
+                                // Send username of player who left in the data
+                                sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAYER_LEFT_GAME, this.username));
+                                enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAYER_LEFT_GAME, this.username));
+                                
+                                // Reset in-game status
+                                inGame = false;
+                                enemy.inGame = false;
+                                
+                                // Update waiting list
+                                serverCtr.sendWaitingList();
+                                
+                                System.out.println("Server: " + this.username + " left the game, " + enemy.username + " wins");
+                            }
+                            break;
                         case ObjectWrapper.EXIT_MAIN_FORM:
                             inGame = false;
                             isOnline = false;

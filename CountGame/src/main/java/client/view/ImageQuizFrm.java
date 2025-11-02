@@ -6,12 +6,19 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import shared.dto.ObjectWrapper;
 
@@ -39,15 +46,77 @@ public class ImageQuizFrm {
                 stage.setTitle("Image Quiz Game");
                 stage.show();
                 
-                // Set button action handler
+                // Set button action handlers
                 Button btnSubmit = (Button) scene.lookup("#btnSubmit");
                 if (btnSubmit != null) {
                     btnSubmit.setOnAction(event -> submitAnswer());
                 }
                 
+                Button btnLeave = (Button) scene.lookup("#btnLeave");
+                if (btnLeave != null) {
+                    btnLeave.setOnAction(event -> handleLeaveGame());
+                }
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+    }
+    
+    private void handleLeaveGame() {
+        Platform.runLater(() -> {
+            // Tạo custom dialog đẹp hơn
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Xác nhận rời trận");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initStyle(StageStyle.UTILITY);
+            
+            // Tạo nội dung dialog
+            VBox content = new VBox(15);
+            content.setStyle("-fx-padding: 20px; -fx-alignment: center; -fx-background-color: #f5f5f5;");
+            
+            Label iconLabel = new Label("⚠️");
+            iconLabel.setStyle("-fx-font-size: 48px; -fx-padding: 10px;");
+            
+            Label titleLabel = new Label("Rời trận");
+            titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f44336;");
+            
+            Label messageLabel = new Label("Nếu rời trận bạn sẽ bị trừ 1 điểm.\nBạn có chắc chắn muốn rời trận?");
+            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center;");
+            messageLabel.setMaxWidth(400);
+            
+            content.getChildren().addAll(iconLabel, titleLabel, messageLabel);
+            dialog.getDialogPane().setContent(content);
+            
+            // Tạo buttons
+            ButtonType confirmButtonType = new ButtonType("Xác nhận", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButtonType = new ButtonType("Hủy", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+            dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, cancelButtonType);
+            
+            // Style cho buttons
+            Button confirmButton = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
+            confirmButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 8px 20px;");
+            
+            Button cancelButton = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
+            cancelButton.setStyle("-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 8px 20px;");
+            
+            // Xử lý kết quả
+            dialog.showAndWait().ifPresent(response -> {
+                if (response == confirmButtonType) {
+                    // Send leave game request to server
+                    mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_LEAVE_GAME, null));
+                    
+                    // Quay về màn hình home ngay lập tức (không cần đợi server response)
+                    // Server sẽ gửi SERVER_PLAYER_LEFT_GAME sau, nhưng để UX tốt hơn, quay về ngay
+                    if (countdownTimeline != null) {
+                        countdownTimeline.stop();
+                    }
+                    // Không cần hiển thị thông báo ở đây vì server sẽ gửi SERVER_PLAYER_LEFT_GAME
+                    // và ImageQuizFrm sẽ xử lý thông báo khi nhận được
+                    MainFrm mainFrm = new MainFrm();
+                    mainFrm.openScene();
+                }
+            });
         });
     }
     
@@ -243,6 +312,30 @@ public class ImageQuizFrm {
                         ResultFrm resultFrm = new ResultFrm();
                         mySocket.setResultFrm(resultFrm);
                         resultFrm.openScene();
+                        break;
+                        
+                    case ObjectWrapper.SERVER_PLAYER_LEFT_GAME:
+                        // Player left game, return to main screen
+                        if (countdownTimeline != null) {
+                            countdownTimeline.stop();
+                        }
+                        
+                        // Get username of player who left
+                        String leftPlayerUsername = (String) data.getData();
+                        String myUsername = mySocket.getUsername();
+                        
+                        // Go back to main screen
+                        MainFrm mainFrm = new MainFrm();
+                        
+                        // Chỉ hiển thị thông báo nếu đây không phải là người rời trận
+                        // (người rời trận đã quay về home từ handleLeaveGame)
+                        if (!myUsername.equals(leftPlayerUsername)) {
+                            // Người còn lại: hiển thị thông báo
+                            mainFrm.openSceneWithNotification(leftPlayerUsername);
+                        } else {
+                            // Người rời trận: chỉ quay về home, không có thông báo
+                            mainFrm.openScene();
+                        }
                         break;
                 }
             } catch (Exception e) {
