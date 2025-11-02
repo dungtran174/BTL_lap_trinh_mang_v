@@ -111,6 +111,21 @@ public class ObjectWrapper implements Serializable {
     public static final int REGISTER_USER = 50;
     public static final int REGISTER_SUCCESSFUL =51;
     public static final int SERVER_REGISTER_USER=52;
+    
+    // Image Quiz Game Constants
+    // client (inviter) gửi request bắt đầu game
+    public static final int START_IMAGE_QUIZ_GAME = 60;
+    // server gửi round data (image bytes + question) cho cả 2 client
+    public static final int SERVER_SEND_ROUND_DATA = 61;
+    // client gửi câu trả lời (số lượng đồ vật)
+    public static final int SUBMIT_ANSWER = 62;
+    // server gửi kết quả round (đúng/sai, điểm hiện tại)
+    public static final int SERVER_SEND_ROUND_RESULT = 63;
+    // server gửi thông báo hết thời gian round
+    public static final int SERVER_ROUND_TIME_OUT = 64;
+    // server gửi kết thúc game (tổng điểm, người thắng)
+    public static final int SERVER_END_IMAGE_QUIZ_GAME = 65;
+    
     private int performative;
     private Object data;
 

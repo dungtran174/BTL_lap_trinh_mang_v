@@ -1,6 +1,7 @@
 package client.network;
 
 import client.controller.ClientCtr;
+import client.view.ImageQuizFrm;
 import shared.dto.ObjectWrapper;
 
 import java.io.IOException;
@@ -95,6 +96,34 @@ public class ClientListening extends Thread {
                                 break;
                             case ObjectWrapper.SERVER_SEND_ALL_USER:
                                 clientCtr.getMainFrm().receivedDataProcessing(data);
+                                break;
+                            case ObjectWrapper.SERVER_SEND_ROUND_DATA:
+                                System.out.println("Client: Received SERVER_SEND_ROUND_DATA");
+                                if (clientCtr.getImageQuizFrm() == null) {
+                                    System.out.println("Client: Creating new ImageQuizFrm");
+                                    ImageQuizFrm imageQuizFrm = new ImageQuizFrm();
+                                    clientCtr.setImageQuizFrm(imageQuizFrm);
+                                    imageQuizFrm.openScene();
+                                    // Wait a bit for scene to be ready
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
+                                break;
+                            case ObjectWrapper.SERVER_SEND_ROUND_RESULT:
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
+                                break;
+                            case ObjectWrapper.SERVER_END_IMAGE_QUIZ_GAME:
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
                                 break;
                         }
 

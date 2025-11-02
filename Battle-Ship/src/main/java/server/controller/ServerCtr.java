@@ -17,8 +17,8 @@ public class ServerCtr {
     private ServerSocket myServer;
     private ServerListening myListening;
     private ArrayList<ServerProcessing> myProcess;
-    private IPAddress myAddress = new IPAddress("localhost", 8888);
-//    private IPAddress myAddress = new IPAddress("26.87.126.183", 8888);
+//    private IPAddress myAddress = new IPAddress("localhost", 8888);
+    private IPAddress myAddress = new IPAddress("26.161.164.36", 8888);
 
     public ServerCtr(ServerMainFrm view) {
         myProcess = new ArrayList<ServerProcessing>();
@@ -35,10 +35,11 @@ public class ServerCtr {
 
     private void openServer() {
         try {
-            myServer = new ServerSocket(myAddress.getPort());
+            // myServer = new ServerSocket(myAddress.getPort());
+            myServer = new ServerSocket(myAddress.getPort(), 50, InetAddress.getByName(myAddress.getHost()));
             myListening = new ServerListening(this);
             myListening.start();
-            myAddress.setHost(InetAddress.getLocalHost().getHostAddress());
+            // myAddress.setHost(InetAddress.getLocalHost().getHostAddress());
             view.showServerInfor(myAddress);
             System.out.println("server started!");
             view.showMessage("TCP server is running at the port " + myAddress.getPort() + "...");

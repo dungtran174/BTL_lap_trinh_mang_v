@@ -22,7 +22,7 @@ public class ClientCtr {
     private Socket mySocket;
     private ClientListening myListening;
     private volatile boolean isConnected = false;
-    private IPAddress serverAddress = new IPAddress("localhost", 8888);
+    private IPAddress serverAddress = new IPAddress("26.161.164.36", 8888); // Thay bằng IP Radmin VPN của máy Server
 
     private ObjectOutputStream oos;
 
@@ -36,6 +36,8 @@ public class ClientCtr {
 
     private MainFrm mainFrm;
     private SetShipFrm setShipFrm;
+    private WaitingFrm waitingFrm;
+    private ImageQuizFrm imageQuizFrm;
     private PlayFrm playFrm;
     private ResultFrm resultFrm;
     private HistoryFrm historyFrm;
@@ -45,6 +47,8 @@ public class ClientCtr {
     private Scene loginScreen;
     private Scene mainScene;
     private Scene setShipScene;
+    private Scene waitingScene;
+    private Scene imageQuizScene;
     private Scene playScene;
     private Scene resultScene;
     private Scene historyScene;
@@ -219,6 +223,22 @@ public class ClientCtr {
     public Scene getSetShipScene() {return setShipScene;}
 
     public void setSetShipScene(Scene setShipScene) {this.setShipScene = setShipScene;}
+
+    public WaitingFrm getWaitingFrm() {return waitingFrm;}
+
+    public void setWaitingFrm(WaitingFrm waitingFrm) {this.waitingFrm = waitingFrm;}
+
+    public Scene getWaitingScene() {return waitingScene;}
+
+    public void setWaitingScene(Scene waitingScene) {this.waitingScene = waitingScene;}
+
+    public ImageQuizFrm getImageQuizFrm() {return imageQuizFrm;}
+
+    public void setImageQuizFrm(ImageQuizFrm imageQuizFrm) {this.imageQuizFrm = imageQuizFrm;}
+
+    public Scene getImageQuizScene() {return imageQuizScene;}
+
+    public void setImageQuizScene(Scene imageQuizScene) {this.imageQuizScene = imageQuizScene;}
 
     public Scene getPlayScene() {return playScene;}
 

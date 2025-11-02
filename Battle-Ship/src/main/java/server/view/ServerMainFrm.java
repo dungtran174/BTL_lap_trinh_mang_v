@@ -39,7 +39,7 @@ public class ServerMainFrm extends javax.swing.JFrame {
 
         jLabel2.setText("Server host:");
 
-        txtServerHost.setText("localhost");
+        txtServerHost.setText("26.161.164.36");
 
         jLabel3.setText("Server port:");
 
@@ -134,7 +134,7 @@ public class ServerMainFrm extends javax.swing.JFrame {
         }
         btnStopServer.setEnabled(false);
         btnStartServer.setEnabled(true);
-        txtServerHost.setText("localhost");
+        txtServerHost.setText("26.161.164.36");
     }
 
     public void showServerInfor(IPAddress addr) {

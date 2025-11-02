@@ -553,11 +553,14 @@ public class MainFrm {
                     break;
 
                 case ObjectWrapper.SERVER_SET_GAME_READY:
-                    if (mySocket.getSetShipFrm() == null) {
-                        SetShipFrm setShipFrm = new SetShipFrm();
-                        mySocket.setSetShipFrm(setShipFrm);
+                    boolean isInviter = (Boolean) data.getData();
+                    if (mySocket.getWaitingFrm() == null) {
+                        WaitingFrm waitingFrm = new WaitingFrm(isInviter);
+                        mySocket.setWaitingFrm(waitingFrm);
+                    } else {
+                        mySocket.getWaitingFrm().setIsInviter(isInviter);
                     }
-                    mySocket.getSetShipFrm().openScene();
+                    mySocket.getWaitingFrm().openScene();
                     backgroundMusicPlayer.stop();
                     break;
 

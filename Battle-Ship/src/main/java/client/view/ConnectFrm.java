@@ -12,8 +12,10 @@ public class ConnectFrm extends javax.swing.JFrame {
     private ClientCtr myControl;
 
     public ConnectFrm() {
-        initComponents();
-        setLocationRelativeTo(null);
+    initComponents();
+    setLocationRelativeTo(null);
+    // Thêm timestamp để phân biệt các client khác nhau trên cùng 1 máy
+    setTitle("Battleship Client - " + System.currentTimeMillis());
     }
 
     /**
