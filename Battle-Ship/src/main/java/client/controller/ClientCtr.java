@@ -35,10 +35,8 @@ public class ClientCtr {
     private LoginFrm loginFrm;
 
     private MainFrm mainFrm;
-    private SetShipFrm setShipFrm;
     private WaitingFrm waitingFrm;
     private ImageQuizFrm imageQuizFrm;
-    private PlayFrm playFrm;
     private ResultFrm resultFrm;
     private HistoryFrm historyFrm;
     private RankingFrm rankingFrm;
@@ -46,10 +44,8 @@ public class ClientCtr {
 
     private Scene loginScreen;
     private Scene mainScene;
-    private Scene setShipScene;
     private Scene waitingScene;
     private Scene imageQuizScene;
-    private Scene playScene;
     private Scene resultScene;
     private Scene historyScene;
     private Scene rankingScene;
@@ -188,21 +184,6 @@ public class ClientCtr {
         this.rankingFrm = rankingFrm;
     }
 
-    public SetShipFrm getSetShipFrm() {
-        return setShipFrm;
-    }
-
-    public void setSetShipFrm(SetShipFrm setShipFrm) {
-        this.setShipFrm = setShipFrm;
-    }
-
-    public PlayFrm getPlayFrm() {
-        return playFrm;
-    }
-
-    public void setPlayFrm(PlayFrm playFrm) {
-        this.playFrm = playFrm;
-    }
 
     public ResultFrm getResultFrm() {
         return resultFrm;
@@ -220,9 +201,6 @@ public class ClientCtr {
 
     public void setMainScene(Scene mainScene) {this.mainScene = mainScene;}
 
-    public Scene getSetShipScene() {return setShipScene;}
-
-    public void setSetShipScene(Scene setShipScene) {this.setShipScene = setShipScene;}
 
     public WaitingFrm getWaitingFrm() {return waitingFrm;}
 
@@ -240,9 +218,6 @@ public class ClientCtr {
 
     public void setImageQuizScene(Scene imageQuizScene) {this.imageQuizScene = imageQuizScene;}
 
-    public Scene getPlayScene() {return playScene;}
-
-    public void setPlayScene(Scene playScene) {this.playScene = playScene;}
 
     public Scene getResultScene() {return resultScene;}
 

@@ -11,19 +11,19 @@
    <children>
       <ImageView fitHeight="533.0" fitWidth="789.0" opacity="0.91" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../Images/intro.gif" />
+            <Image url="@../../Images/big.png" />
          </image>
       </ImageView>
       
-      <Label fx:id="waitingLabel" alignment="CENTER" layoutX="186.0" layoutY="200.0" prefHeight="100.0" prefWidth="400.0" text="Chờ đối thủ..." textAlignment="CENTER" wrapText="true">
+      <Label fx:id="waitingLabel" alignment="CENTER" layoutX="186.0" layoutY="200.0" prefHeight="100.0" prefWidth="400.0" text="Chờ đối thủ..." textAlignment="CENTER" wrapText="true" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 10px; -fx-padding: 20px;">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="28.0" />
          </font>
       </Label>
       
-      <Button fx:id="btnStart" layoutX="336.0" layoutY="350.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Start" visible="false">
+      <Button fx:id="btnStart" layoutX="336.0" layoutY="350.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Bắt đầu" visible="false" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);">
          <font>
-            <Font size="18.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </Button>
    </children>

@@ -32,16 +32,18 @@ public class PlayerDAO extends DAO {
     }
     
     public void CreateAccount(Player player){
+        // Database structure: username (PK), password, points (DEFAULT 0), total_wins (DEFAULT 0), 
+        // total_losses (DEFAULT 0), total_afk (DEFAULT 0), total_draw (DEFAULT 0)
         String sql = "INSERT INTO players (username, password, points, total_wins, total_losses, total_afk, total_draw) VALUES(?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, player.getUsername());
             ps.setString(2, player.getPassword());
-            ps.setString(3, Integer.toString(player.getPoints()));
-            ps.setString(4, Integer.toString(player.getTotalWins()));
-            ps.setString(5, Integer.toString(player.getTotalLosses()));
-            ps.setString(6, Integer.toString(player.getTotalAfk()));
-            ps.setString(7, Integer.toString(player.getTotalDraw()));
+            ps.setInt(3, player.getPoints());
+            ps.setInt(4, player.getTotalWins());
+            ps.setInt(5, player.getTotalLosses());
+            ps.setInt(6, player.getTotalAfk());
+            ps.setInt(7, player.getTotalDraw());
             
             ps.executeUpdate();
             

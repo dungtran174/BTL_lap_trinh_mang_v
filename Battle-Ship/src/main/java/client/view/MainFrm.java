@@ -162,7 +162,6 @@ public class MainFrm {
                     audioClickButtonLogout();
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.EXIT_MAIN_FORM, null));
                     mySocket.setMainScene(null);
-                    mySocket.setSetShipFrm(null);
                     mySocket.setLoginScreen(null);
                     backgroundMusicPlayer.stop();
 

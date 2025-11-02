@@ -17,6 +17,8 @@ public class MatchDAO {
     }
 
     public boolean updateMatchResult(Match match) {
+        // Database structure: match_id (AUTO_INCREMENT), user1_username, user2_username, 
+        // timestamp (DEFAULT CURRENT_TIMESTAMP), result_user1, result_user2, points_change_user1, points_change_user2
         String sql = "INSERT INTO matches (user1_username, user2_username, result_user1, result_user2, points_change_user1, points_change_user2) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try {

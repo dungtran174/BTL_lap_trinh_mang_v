@@ -1,4 +1,4 @@
-module com.ltm.battleship {
+module com.ltm.countgame {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;

@@ -15,8 +15,8 @@ public class ImageQuizGameCtr {
     private int player2Answer;
     private boolean gameFinished;
     private boolean roundProcessed; // Flag to prevent processing same round multiple times
-    private String player1Username;
-    private String player2Username;
+    public String player1Username; // Public to allow ServerProcessing to access
+    public String player2Username; // Public to allow ServerProcessing to access
     
     public ImageQuizGameCtr(String player1Username, String player2Username) {
         this.player1Username = player1Username;

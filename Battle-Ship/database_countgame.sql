@@ -1,4 +1,11 @@
-CREATE TABLE players (
+-- Database script for CountGame
+-- Create database
+CREATE DATABASE IF NOT EXISTS countgame CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE countgame;
+
+-- Create players table
+CREATE TABLE IF NOT EXISTS players (
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(50),
     points INT DEFAULT 0,
@@ -8,7 +15,8 @@ CREATE TABLE players (
     total_draw INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE matches (
+-- Create matches table
+CREATE TABLE IF NOT EXISTS matches (
     match_id INT AUTO_INCREMENT PRIMARY KEY,
     user1_username VARCHAR(50) NOT NULL,
     user2_username VARCHAR(50) NOT NULL,
@@ -21,8 +29,10 @@ CREATE TABLE matches (
     FOREIGN KEY (user2_username) REFERENCES players(username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Insert test users
 INSERT INTO players (username, password)
 VALUES 
 ('test1', '1'),
 ('test2', '2'),
 ('test3', '3');
+

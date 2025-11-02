@@ -8,7 +8,7 @@ public class DAO {
 
     public static Connection con;
     // Cấu hình MySQL cho XAMPP
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/battleship?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/countgame?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "123456"; // XAMPP mặc định không có password
 

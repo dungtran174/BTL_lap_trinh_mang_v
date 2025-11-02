@@ -90,7 +90,7 @@
             <children>
                 <ImageView fitHeight="516.0" fitWidth="773.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../../Images/intro.gif" />
+                        <Image url="@../../Images/big.png" />
                     </image></ImageView>
             </children>
         </AnchorPane>

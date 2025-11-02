@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ltm</groupId>
-  <artifactId>Battle-Ship</artifactId>
+  <artifactId>CountGame</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>Battle-Ship</name>
+  <name>CountGame</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -157,7 +157,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.ltm.battleship/client.view.LoginFrm</mainClass>
+              <mainClass>com.ltm.countgame/client.view.LoginFrm</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

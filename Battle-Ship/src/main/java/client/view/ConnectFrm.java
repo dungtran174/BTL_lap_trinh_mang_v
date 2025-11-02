@@ -15,7 +15,7 @@ public class ConnectFrm extends javax.swing.JFrame {
     initComponents();
     setLocationRelativeTo(null);
     // Thêm timestamp để phân biệt các client khác nhau trên cùng 1 máy
-    setTitle("Battleship Client - " + System.currentTimeMillis());
+    setTitle("CountGame Client - " + System.currentTimeMillis());
     }
 
     /**

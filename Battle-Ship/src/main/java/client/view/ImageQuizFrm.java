@@ -23,6 +23,9 @@ public class ImageQuizFrm {
     private Stage stage = mySocket.getStage();
     private Timeline countdownTimeline;
     private boolean answerSubmitted = false;
+    private double currentMyScore = 0.0;
+    private double currentEnemyScore = 0.0;
+    private boolean isPlayer1 = false; // Track if current player is player1
     
     public void openScene() {
         Platform.runLater(() -> {
@@ -91,6 +94,15 @@ public class ImageQuizFrm {
                 if (btnSubmit != null) {
                     btnSubmit.setDisable(false);
                 }
+                
+                // Hide result label
+                Label lblResult = (Label) scene.lookup("#lblResult");
+                if (lblResult != null) {
+                    lblResult.setVisible(false);
+                }
+                
+                // Update score display
+                updateScoreDisplay();
                 
                 // Start countdown (15 seconds)
                 startCountdown(15);
@@ -254,18 +266,51 @@ public class ImageQuizFrm {
                 double player1Score = (Double) resultData[4];
                 double player2Score = (Double) resultData[5];
                 boolean gameFinished = (Boolean) resultData[8];
+                String player1Username = resultData.length > 10 ? (String) resultData[10] : null;
+                String player2Username = resultData.length > 11 ? (String) resultData[11] : null;
                 
+                // Determine if current player is player1 or player2 (only set once)
+                if (player1Username != null && player2Username != null) {
+                    String myUsername = mySocket.getUsername();
+                    if (myUsername.equals(player1Username)) {
+                        isPlayer1 = true;
+                    } else if (myUsername.equals(player2Username)) {
+                        isPlayer1 = false;
+                    }
+                } else {
+                    // Fallback: determine based on score pattern (if scores are same, might be first round)
+                    // This is a backup in case usernames are not sent
+                    if (roundNumber == 1) {
+                        // Assume player1 initially, will be corrected when usernames are available
+                        isPlayer1 = true;
+                    }
+                }
+                
+                // Update scores based on player role
+                if (isPlayer1) {
+                    currentMyScore = player1Score;
+                    currentEnemyScore = player2Score;
+                } else {
+                    currentMyScore = player2Score;
+                    currentEnemyScore = player1Score;
+                }
+                
+                // Update score display
+                updateScoreDisplay();
+                
+                // Show round result
                 Label lblResult = (Label) scene.lookup("#lblResult");
                 if (lblResult != null) {
                     String resultText = "Round " + roundNumber + " kết thúc!\n";
                     resultText += "Đáp án đúng: " + correctAnswer + "\n";
-                    resultText += "Điểm của bạn: " + player1Score + "\n";
-                    resultText += "Điểm đối thủ: " + player2Score;
+                    resultText += "Điểm của bạn: " + currentMyScore + "\n";
+                    resultText += "Điểm đối thủ: " + currentEnemyScore;
                     if (gameFinished) {
                         resultText += "\n\nGame kết thúc!";
                     }
                     lblResult.setText(resultText);
                     lblResult.setVisible(true);
+                    lblResult.setStyle("-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10px; -fx-padding: 15px;");
                 }
                 
                 // Stop countdown
@@ -273,6 +318,29 @@ public class ImageQuizFrm {
                     countdownTimeline.stop();
                 }
                 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    private void updateScoreDisplay() {
+        Platform.runLater(() -> {
+            try {
+                Scene scene = mySocket.getImageQuizScene();
+                if (scene == null) {
+                    return;
+                }
+                
+                Label lblMyScore = (Label) scene.lookup("#lblMyScore");
+                if (lblMyScore != null) {
+                    lblMyScore.setText(String.format("Điểm của bạn: %.1f", currentMyScore));
+                }
+                
+                Label lblEnemyScore = (Label) scene.lookup("#lblEnemyScore");
+                if (lblEnemyScore != null) {
+                    lblEnemyScore.setText(String.format("Điểm đối thủ: %.1f", currentEnemyScore));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

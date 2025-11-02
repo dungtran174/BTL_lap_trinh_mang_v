@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 
@@ -25,7 +23,6 @@ public class LoginFrm extends Application {
 
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
-    MediaPlayer backgroundMusicPlayer;
 
     public LoginFrm() {
 
@@ -41,7 +38,6 @@ public class LoginFrm extends Application {
             stage.setOnCloseRequest((WindowEvent event) -> {
                 mySocket.sendData(new ObjectWrapper(ObjectWrapper.EXIT_MAIN_FORM, null));
                 mySocket.setMainScene(null);
-                mySocket.setSetShipFrm(null);
                 mySocket.setLoginScreen(null);
             });
             openScene();
@@ -77,7 +73,6 @@ public class LoginFrm extends Application {
 
                 // Set up click event handlers
                 loginButton.setOnAction(event -> {
-                    audioClickButton();
                     // Handle login button click
                     String username = usernameLoginTextField.getText();
                     String password = passwordLoginField.getText();
@@ -100,15 +95,12 @@ public class LoginFrm extends Application {
                 });
 
                 signupButton.setOnAction(event -> {
-                    audioClickButton();
                     if (mySocket.getRegisterFrm() == null) {
                         RegisterFrm registerFrm = new RegisterFrm();
                         mySocket.setRegisterFrm(registerFrm);
                     }
-                    backgroundMusicPlayer.stop();
                     mySocket.getRegisterFrm().openScene();
                 });
-                initializeBackgroundMusic();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -142,7 +134,6 @@ public class LoginFrm extends Application {
                     MainFrm mainFrm = new MainFrm();
                     mySocket.setMainFrm(mainFrm);
                 }
-                mySocket.getBackgroundMusicPlayer().stop();
 
                 mySocket.getMainFrm().openScene();
 
@@ -150,36 +141,6 @@ public class LoginFrm extends Application {
         });
     }
 
-    public void initializeBackgroundMusic(){
-        // tao am thanh nen
-        String backgroundMusicFile = new File("src/main/resources/Sounds/login.mp3").toURI().toString();
-        Media backgroundMusic = new Media(backgroundMusicFile);
-        backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
-        mySocket.setBackgroundMusicPlayer(backgroundMusicPlayer);
-
-        backgroundMusicPlayer.setVolume(0.6);
-        backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        
-        // Thêm error handler
-        backgroundMusicPlayer.setOnError(() -> {
-            System.out.println("Media error occurred: " + backgroundMusicPlayer.getError());
-        });
-
-        // Thêm status listener để debug
-        backgroundMusicPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Status changed from " + oldValue + " to " + newValue);
-        });
-
-        backgroundMusicPlayer.play();
-    }
-
-    public void audioClickButton(){
-        String clickButtonFile = new File("src/main/resources/Sounds/click-233950.mp3").toURI().toString();
-        Media clickButton = new Media(clickButtonFile);
-        MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-        clickButtonPlayer.setVolume(0.8);
-        clickButtonPlayer.play();
-    }
 
 
 
