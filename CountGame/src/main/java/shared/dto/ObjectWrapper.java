@@ -131,6 +131,18 @@ public class ObjectWrapper implements Serializable {
     // server gửi thông báo người chơi đã rời trận và quay về màn hình chính
     public static final int SERVER_PLAYER_LEFT_GAME = 67;
     
+    // Play Again - Rematch
+    // client gửi response về việc muốn chơi lại hay không (YES/NO)
+    public static final int CLIENT_PLAY_AGAIN_RESPONSE = 68;
+    // server yêu cầu cả 2 client xác nhận có muốn chơi lại không
+    public static final int SERVER_ASK_PLAY_AGAIN = 69;
+    // server thông báo bắt đầu game mới (cả 2 đồng ý)
+    public static final int SERVER_START_NEW_GAME = 70;
+    // server thông báo một người từ chối, không chơi lại
+    public static final int SERVER_PLAY_AGAIN_DECLINED = 71;
+    // server thông báo đang chờ đối thủ xác nhận play again
+    public static final int SERVER_WAITING_OPPONENT_CONFIRM = 72;
+    
     private int performative;
     private Object data;
 

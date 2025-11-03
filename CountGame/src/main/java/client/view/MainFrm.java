@@ -252,6 +252,13 @@ public class MainFrm {
                     // cap nhat status cua user
                     ArrayList<Player> listUserWaiting = (ArrayList<Player>) data.getData();
                     ArrayList<HBox> listUserItem = new ArrayList<>();
+                    
+                    // Check if scene is null
+                    if (scene == null) {
+                        System.err.println("MainFrm: Scene is null, cannot update waiting list");
+                        break;
+                    }
+                    
                     VBox screnListUserWaiting = (VBox) scene.lookup("#listUerVbox");
 
 

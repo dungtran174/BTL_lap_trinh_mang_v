@@ -9,12 +9,10 @@
 
 .game-button {
     -fx-cursor: hand;
-    -fx-font-size: inherit;
 }
 
 .game-button:hover {
     -fx-opacity: 0.85;
-    -fx-font-size: inherit;
 }
 
 /* Ensure background fills entire pane */

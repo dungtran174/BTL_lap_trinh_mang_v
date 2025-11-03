@@ -62,8 +62,9 @@ public class ClientListening extends Thread {
                                 break;
                             case ObjectWrapper.SERVER_SEND_ROUND_DATA:
                                 System.out.println("Client: Received SERVER_SEND_ROUND_DATA");
-                                if (clientCtr.getImageQuizFrm() == null) {
-                                    System.out.println("Client: Creating new ImageQuizFrm");
+                                // Always create new ImageQuizFrm if null or if we're on result screen (play again scenario)
+                                if (clientCtr.getImageQuizFrm() == null || clientCtr.getResultFrm() != null) {
+                                    System.out.println("Client: Creating new ImageQuizFrm for round data");
                                     ImageQuizFrm imageQuizFrm = new ImageQuizFrm();
                                     clientCtr.setImageQuizFrm(imageQuizFrm);
                                     imageQuizFrm.openScene();
@@ -73,9 +74,13 @@ public class ClientListening extends Thread {
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
+                                    // Clear result form reference since we're entering game
+                                    clientCtr.setResultFrm(null);
                                 }
                                 if (clientCtr.getImageQuizFrm() != null) {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                } else {
+                                    System.err.println("Client: ImageQuizFrm is still null after creation attempt");
                                 }
                                 break;
                             case ObjectWrapper.SERVER_SEND_ROUND_RESULT:
@@ -86,6 +91,13 @@ public class ClientListening extends Thread {
                             case ObjectWrapper.SERVER_END_IMAGE_QUIZ_GAME:
                                 if (clientCtr.getImageQuizFrm() != null) {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
+                                break;
+                            case ObjectWrapper.SERVER_ASK_PLAY_AGAIN:
+                            case ObjectWrapper.SERVER_START_NEW_GAME:
+                            case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
+                                if (clientCtr.getResultFrm() != null) {
+                                    clientCtr.getResultFrm().receivedDataProcessing(data);
                                 }
                                 break;
                             case ObjectWrapper.SERVER_PLAYER_LEFT_GAME:

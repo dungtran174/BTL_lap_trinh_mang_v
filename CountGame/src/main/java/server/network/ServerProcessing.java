@@ -43,6 +43,9 @@ public class ServerProcessing extends Thread {
     private TimerTask checkTimeTask;
 
     private String result; // win, loss, afk, cancelled
+    
+    // Play Again variables
+    private Boolean playAgainResponse = null; // null = not answered, true = yes, false = no
 
     private PlayerDAO playerDAO = new PlayerDAO();
     private MatchDAO matchDAO = new MatchDAO();
@@ -194,6 +197,19 @@ public class ServerProcessing extends Thread {
                                 }
                             }
                             break;
+                        case ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE:
+                            if (enemy != null) {
+                                Boolean wantsPlayAgain = (Boolean) data.getData();
+                                this.playAgainResponse = wantsPlayAgain;
+                                System.out.println("Server: " + this.username + " play again response: " + wantsPlayAgain);
+                                
+                                // Check if both players have responded
+                                if (this.playAgainResponse != null && enemy.playAgainResponse != null) {
+                                    handlePlayAgainDecision();
+                                }
+                            }
+                            break;
+                            
                         case ObjectWrapper.CLIENT_LEAVE_GAME:
                             // Handle player leaving game mid-match
                             if (inGame && enemy != null && imageQuizGameCtr != null) {
@@ -541,21 +557,99 @@ public class ServerProcessing extends Thread {
                 }
                 
                 // Reset game state for next game (but keep enemy reference and isInviter flag)
-                // These will be reset when players go back to main form
+                // These will be reset when players go back to main form OR when starting new game
                 imageQuizGameCtr = null;
                 enemy.imageQuizGameCtr = null;
                 System.out.println("Server: Game finished, reset game state for " + username + " and " + enemy.username);
                 System.out.println("Server: Enemy reference maintained: " + (enemy != null ? enemy.username : "null") + 
                                  ", isInviter: " + isInviter);
+                
+                // After game ends, ask both players if they want to play again
+                Timer askPlayAgainTimer = new Timer();
+                askPlayAgainTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (enemy != null) {
+                            // Reset play again responses
+                            playAgainResponse = null;
+                            enemy.playAgainResponse = null;
+                            
+                            // Ask both players
+                            sendData(new ObjectWrapper(ObjectWrapper.SERVER_ASK_PLAY_AGAIN));
+                            enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_ASK_PLAY_AGAIN));
+                            System.out.println("Server: Asking both players if they want to play again");
+                        }
+                    }
+                }, 2000); // Wait 2 seconds after game ends before asking
             } else {
-                // Move to next round after a short delay (2 seconds)
+                // Move to next round after a delay (3 seconds to allow result display)
                 Timer delayTimer = new Timer();
                 delayTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         startImageQuizRound();
                     }
-                }, 2000);
+                }, 3000); // 3 seconds: 1 second for result display + 2 seconds buffer
+            }
+        }
+    }
+    
+    private void handlePlayAgainDecision() {
+        if (enemy == null) {
+            return;
+        }
+        
+        synchronized (this) {
+            synchronized (enemy) {
+                // Check if both want to play again
+                if (this.playAgainResponse && enemy.playAgainResponse) {
+                    System.out.println("Server: Both players want to play again, starting new game");
+                    
+                    // Reset play again responses
+                    this.playAgainResponse = null;
+                    enemy.playAgainResponse = null;
+                    
+                    // Notify both clients to start new game
+                    sendData(new ObjectWrapper(ObjectWrapper.SERVER_START_NEW_GAME));
+                    enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_START_NEW_GAME));
+                    
+                    // Keep enemy reference and start new game
+                    // Create new game controller - only inviter creates it
+                    if (isInviter) {
+                        System.out.println("Server: " + this.username + " is inviter, creating new game controller");
+                        imageQuizGameCtr = new ImageQuizGameCtr(this.username, enemy.username);
+                        enemy.imageQuizGameCtr = imageQuizGameCtr;
+                        
+                        System.out.println("Server: Game controller created. Player1: " + imageQuizGameCtr.player1Username + ", Player2: " + imageQuizGameCtr.player2Username);
+                        
+                        // Start the first round after a short delay
+                        Timer startGameTimer = new Timer();
+                        startGameTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                System.out.println("Server: Starting first round of new game for " + username + " and " + enemy.username);
+                                System.out.println("Server: imageQuizGameCtr is " + (imageQuizGameCtr != null ? "not null" : "null"));
+                                System.out.println("Server: enemy.imageQuizGameCtr is " + (enemy.imageQuizGameCtr != null ? "not null" : "null"));
+                                startImageQuizRound();
+                            }
+                        }, 1000);
+                    } else {
+                        System.out.println("Server: " + enemy.username + " is inviter, waiting for them to create game controller");
+                        // Enemy will create the game controller and start the round
+                    }
+                    
+                } else {
+                    // At least one player declined
+                    System.out.println("Server: At least one player declined play again");
+                    
+                    // Reset play again responses
+                    this.playAgainResponse = null;
+                    enemy.playAgainResponse = null;
+                    
+                    // Notify both clients
+                    sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED));
+                    enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED));
+                }
             }
         }
     }
