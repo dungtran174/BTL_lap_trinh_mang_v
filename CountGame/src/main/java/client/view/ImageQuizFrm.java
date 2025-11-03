@@ -91,10 +91,10 @@ public class ImageQuizFrm {
             }
             
             Label titleLabel = new Label("Leave Game");
-            titleLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #f44336; -fx-font-family: 'JejuHallasan';");
-            
+            titleLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #f44336; -fx-font-family: 'Be Vietnam Pro';");
+
             Label messageLabel = new Label("If you leave, you will lose 1 point.\nAre you sure you want to leave?");
-            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'JejuHallasan';");
+            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'Be Vietnam Pro';");
             messageLabel.setMaxWidth(400);
             
             content.getChildren().addAll(titleLabel, messageLabel);
@@ -109,11 +109,11 @@ public class ImageQuizFrm {
             
             // Style cho buttons với bo góc
             Button confirmButton = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
-            confirmButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'JejuHallasan';");
+            confirmButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'Be Vietnam Pro';");
             
             Button cancelButton = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
-            cancelButton.setStyle("-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'JejuHallasan';");
-            
+            cancelButton.setStyle("-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'Be Vietnam Pro';");
+
             // Xử lý kết quả
             dialog.showAndWait().ifPresent(response -> {
                 if (response == confirmButtonType) {
@@ -446,7 +446,7 @@ public class ImageQuizFrm {
                 
                 Label lblEnemyScore = (Label) scene.lookup("#lblEnemyScore");
                 if (lblEnemyScore != null) {
-                    lblEnemyScore.setText(String.format("Opponent Score: %.1f", currentEnemyScore));
+                    lblEnemyScore.setText(String.format("Opponent: %.1f", currentEnemyScore));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

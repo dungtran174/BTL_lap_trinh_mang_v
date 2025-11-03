@@ -1,11 +1,6 @@
 @font-face {
-    font-family: 'JejuHallasan';
-    src: url('../Fonts/JejuHallasan-Regular.ttf');
-}
-
-@font-face {
-    font-family: 'MetalMania';
-    src: url('../Fonts/MetalMania-Regular.ttf');
+    font-family: 'Be Vietnam Pro';
+    src: url('../Fonts/BeVietnamPro-Regular.ttf');
 }
 
 
@@ -56,7 +51,7 @@
     -fx-background-color: rgba(255, 23, 23, 0);
     -fx-text-fill: rgba(44, 64, 53, 0.7);
     -fx-font-size: 16px;
-    -fx-font-family: JejuHallasan;
+    -fx-font-family: "Be Vietnam Pro";
     -fx-cursor: hand;
 }
 

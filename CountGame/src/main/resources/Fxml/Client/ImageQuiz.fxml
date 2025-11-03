@@ -12,44 +12,44 @@
 
 <AnchorPane prefHeight="516.0" prefWidth="773.0" styleClass="game-pane game-background" stylesheets="@../../Styles/play.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <!-- Background Image - Fill entire pane -->
-      <ImageView fitHeight="516.0" fitWidth="777.0" layoutX="0.0" layoutY="0.0" opacity="0.91" pickOnBounds="false" preserveRatio="false">
+      <!-- Background Image - Fill entire pane, stretch to cover -->
+      <ImageView fitHeight="516.0" fitWidth="773.0" layoutX="0.0" layoutY="0.0" opacity="0.91" pickOnBounds="false" preserveRatio="false">
          <image>
             <Image url="@../../Images/big.png" />
          </image>
       </ImageView>
       
       <!-- Top Section: Scores and Round Info -->
-      <VBox alignment="CENTER" layoutX="0.0" layoutY="10.0" prefHeight="80.0" prefWidth="773.0" spacing="10">
+      <VBox alignment="CENTER" layoutX="0.0" layoutY="5.0" prefHeight="80.0" prefWidth="773.0" spacing="8">
          <children>
             <!-- Scores Row -->
-            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="773.0" spacing="20">
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="773.0" spacing="30">
                <children>
-                  <Label fx:id="lblMyScore" alignment="CENTER" prefHeight="35.0" prefWidth="180.0" text="Your Score: 0.0" textAlignment="CENTER" style="-fx-background-color: rgba(76, 175, 80, 0.85); -fx-background-radius: 8px; -fx-text-fill: white; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);" styleClass="game-label">
+                  <Label fx:id="lblMyScore" alignment="CENTER" prefHeight="35.0" prefWidth="170.0" text="Score: 0.0" textAlignment="CENTER" style="-fx-background-color: rgba(76, 175, 80, 0.85); -fx-background-radius: 8px; -fx-text-fill: white; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);" styleClass="game-label">
                      <font>
-                        <Font name="JejuHallasan" size="16.0" />
+                        <Font name="Be Vietnam Pro" size="15.0" />
                      </font>
                   </Label>
                   
                   <!-- Round and Timer Container -->
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="3">
                      <children>
-                        <Label fx:id="lblRound" alignment="CENTER" prefHeight="25.0" prefWidth="200.0" text="Round 1 / 3" textAlignment="CENTER" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 5px; -fx-padding: 5px;" styleClass="game-label">
+                        <Label fx:id="lblRound" alignment="CENTER" prefHeight="22.0" prefWidth="180.0" text="Round 1 / 3" textAlignment="CENTER" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 5px; -fx-padding: 4px;" styleClass="game-label">
                            <font>
-                              <Font name="JejuHallasan" size="18.0" />
+                              <Font name="Be Vietnam Pro" size="16.0" />
                            </font>
                         </Label>
                         <Label fx:id="lblTimer" alignment="CENTER" prefHeight="45.0" prefWidth="70.0" text="15" textAlignment="CENTER" style="-fx-text-fill: #FF5722; -fx-background-color: rgba(255, 255, 255, 0.95); -fx-background-radius: 50%; -fx-padding: 5px; -fx-effect: dropshadow(gaussian, rgba(255,87,34,0.5), 10, 0, 0, 0);" styleClass="game-label">
                            <font>
-                              <Font name="JejuHallasan" size="36.0" />
+                              <Font name="Be Vietnam Pro" size="36.0" />
                            </font>
                         </Label>
                      </children>
                   </VBox>
-                  
-                  <Label fx:id="lblEnemyScore" alignment="CENTER" prefHeight="35.0" prefWidth="180.0" text="Opponent Score: 0.0" textAlignment="CENTER" style="-fx-background-color: rgba(244, 67, 54, 0.85); -fx-background-radius: 8px; -fx-text-fill: white; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);" styleClass="game-label">
+
+                  <Label fx:id="lblEnemyScore" alignment="CENTER" prefHeight="35.0" prefWidth="170.0" text="Opponent: 0.0" textAlignment="CENTER" style="-fx-background-color: rgba(244, 67, 54, 0.85); -fx-background-radius: 8px; -fx-text-fill: white; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);" styleClass="game-label">
                      <font>
-                        <Font name="JejuHallasan" size="16.0" />
+                        <Font name="Be Vietnam Pro" size="15.0" />
                      </font>
                   </Label>
                </children>
@@ -57,47 +57,47 @@
          </children>
       </VBox>
       
-      <!-- Main Image Section -->
-      <VBox alignment="CENTER" layoutX="0.0" layoutY="130.0" prefHeight="280.0" prefWidth="773.0" spacing="10">
+      <!-- Main Image Section - Moved down to avoid overlap -->
+      <VBox alignment="CENTER" layoutX="0.0" layoutY="100.0" prefHeight="250.0" prefWidth="773.0" spacing="8">
          <children>
-            <ImageView fx:id="imgView" fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5); -fx-background-color: white; -fx-background-radius: 10px;">
+            <ImageView fx:id="imgView" fitHeight="265.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 5); -fx-background-color: white; -fx-background-radius: 10px;">
             </ImageView>
             
-            <!-- Result Label -->
-            <Label fx:id="lblResult" alignment="CENTER" maxWidth="450.0" prefHeight="60.0" prefWidth="450.0" text="" textAlignment="CENTER" visible="false" wrapText="true" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.75); -fx-background-radius: 8px; -fx-padding: 10px;" styleClass="game-label">
+            <!-- Result Label - Compact -->
+            <Label fx:id="lblResult" alignment="CENTER" maxWidth="420.0" prefHeight="50.0" prefWidth="420.0" text="" textAlignment="CENTER" visible="false" wrapText="true" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.75); -fx-background-radius: 8px; -fx-padding: 8px;" styleClass="game-label">
                <font>
-                  <Font name="JejuHallasan" size="14.0" />
+                  <Font name="Be Vietnam Pro" size="13.0" />
                </font>
             </Label>
          </children>
       </VBox>
       
-      <!-- Bottom Section: Question and Input -->
-      <VBox alignment="CENTER" layoutX="0.0" layoutY="440.0" prefHeight="76.0" prefWidth="773.0" spacing="8">
+      <!-- Bottom Section: Question and Input - Moved up, compact -->
+      <VBox alignment="CENTER" layoutX="0.0" layoutY="375.0" prefHeight="135.0" prefWidth="773.0" spacing="10">
          <children>
-            <Label fx:id="lblQuestion" alignment="CENTER" prefHeight="30.0" prefWidth="550.0" text="Question will be displayed here" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.65); -fx-background-radius: 6px; -fx-padding: 8px;" styleClass="game-label">
+            <Label fx:id="lblQuestion" alignment="CENTER" prefHeight="28.0" prefWidth="520.0" text="Question will be displayed here" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.65); -fx-background-radius: 6px; -fx-padding: 6px;" styleClass="game-label">
                <font>
-                  <Font name="JejuHallasan" size="16.0" />
+                  <Font name="Be Vietnam Pro" size="15.0" />
                </font>
             </Label>
             
-            <HBox alignment="CENTER" spacing="12">
+            <HBox alignment="CENTER" spacing="10">
                <children>
-                  <TextField fx:id="txtAnswer" alignment="CENTER" prefHeight="35.0" prefWidth="250.0" promptText="Enter number" style="-fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px; -fx-border-radius: 6px; -fx-background-radius: 6px; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);">
+                  <TextField fx:id="txtAnswer" alignment="CENTER" prefHeight="38.0" prefWidth="240.0" promptText="Enter number" style="-fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px; -fx-border-radius: 6px; -fx-background-radius: 6px; -fx-padding: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);">
                      <font>
                         <Font name="System" size="18.0" />
                      </font>
                   </TextField>
                   
-                  <Button fx:id="btnSubmit" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Submit" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
+                  <Button fx:id="btnSubmit" mnemonicParsing="false" prefHeight="38.0" prefWidth="105.0" text="Submit" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
                      <font>
-                        <Font name="JejuHallasan" size="16.0" />
+                        <Font name="Be Vietnam Pro" size="16.0" />
                      </font>
                   </Button>
                   
-                  <Button fx:id="btnLeave" mnemonicParsing="false" prefHeight="35.0" prefWidth="110.0" text="Leave" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
+                  <Button fx:id="btnLeave" mnemonicParsing="false" prefHeight="38.0" prefWidth="105.0" text="Leave" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
                      <font>
-                        <Font name="JejuHallasan" size="16.0" />
+                        <Font name="Be Vietnam Pro" size="16.0" />
                      </font>
                   </Button>
                </children>

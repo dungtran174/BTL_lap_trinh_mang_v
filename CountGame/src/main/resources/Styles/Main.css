@@ -1,11 +1,6 @@
 @font-face {
-    font-family: 'JejuHallasan';
-    src: url('../Fonts/JejuHallasan-Regular.ttf');
-}
-
-@font-face {
-    font-family: 'MetalMania';
-    src: url('../Fonts/MetalMania-Regular.ttf');
+    font-family: 'Be Vietnam Pro';
+    src: url('../Fonts/BeVietnamPro-Regular.ttf');
 }
 
 
@@ -37,7 +32,7 @@
 .text-lable {
     -fx-text-fill: rgb(237, 86, 86);
     -fx-font-size: 15px;
-    -fx-font-family: JejuHallasan;
+    -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
 }
 
@@ -45,7 +40,7 @@
     -fx-background-color: rgba(255, 23, 23, 0);
     -fx-text-fill: rgba(217, 223, 165, 0.7);
     -fx-font-size: 14px;
-    -fx-font-family: JejuHallasan;
+    -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -111,7 +106,7 @@
 .userInvitePlayGame{
     -fx-text-fill: rgb(251, 57, 57);
     -fx-font-size: 11px;
-    -fx-font-family: JejuHallasan;
+    -fx-font-family: "Be Vietnam Pro";
 }
 
 .itemsUserHome{

@@ -1,23 +1,20 @@
 @font-face {
-    font-family: 'JejuHallasan';
-    src: url('../Fonts/JejuHallasan-Regular.ttf');
-}
-
-@font-face {
-    font-family: 'MetalMania';
-    src: url('../Fonts/MetalMania-Regular.ttf');
+    font-family: 'Be Vietnam Pro';
+    src: url('../Fonts/BeVietnamPro-Regular.ttf');
 }
 
 .game-label {
-    -fx-font-family: JejuHallasan;
+    -fx-font-family: "Be Vietnam Pro";
 }
 
 .game-button {
     -fx-cursor: hand;
+    -fx-font-size: inherit;
 }
 
 .game-button:hover {
-    -fx-opacity: 0.9;
+    -fx-opacity: 0.85;
+    -fx-font-size: inherit;
 }
 
 /* Ensure background fills entire pane */

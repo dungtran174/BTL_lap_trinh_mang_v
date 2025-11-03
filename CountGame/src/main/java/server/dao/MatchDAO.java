@@ -4,7 +4,7 @@ import shared.model.Match;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,9 @@ public class MatchDAO {
             while (rs.next()) {
                 String user1Username = rs.getString("user1_username");
                 String user2Username = rs.getString("user2_username");
-                Timestamp timestamp = rs.getTimestamp("timestamp");
+                // Lấy timestamp dưới dạng String để tránh lỗi múi giờ
+                String timestampStr = rs.getString("timestamp");
+                LocalDateTime timestamp = LocalDateTime.parse(timestampStr.replace(" ", "T"));
 
                 // Xác định vai trò của `username` trong trận đấu và thiết lập thông tin tương ứng
                 String enemy;
@@ -67,7 +69,7 @@ public class MatchDAO {
                     pointsChange = rs.getInt("points_change_user2");
                 }
 
-                listMatch.add(new Match(enemy, timestamp.toLocalDateTime(), result, pointsChange));
+                listMatch.add(new Match(enemy, timestamp, result, pointsChange));
             }
         } catch (Exception e) {
             e.printStackTrace();
