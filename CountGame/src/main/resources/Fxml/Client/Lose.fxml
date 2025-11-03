@@ -42,7 +42,7 @@
          <graphic>
             <ImageView fitHeight="56.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../Images/continue.png" />
+                  <Image url="@../../Images/back.png" />
                </image>
             </ImageView>
          </graphic></Button>

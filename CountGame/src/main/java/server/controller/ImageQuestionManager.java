@@ -12,10 +12,52 @@ import java.util.Random;
 
 public class ImageQuestionManager {
     
+    // Class helper để lưu cặp câu hỏi - đáp án
+    private static class QuestionAnswerPair {
+        String question;
+        int answer;
+        
+        QuestionAnswerPair(String question, int answer) {
+            this.question = question;
+            this.answer = answer;
+        }
+    }
+    
     private static ImageQuestionManager instance;
     private Map<String, ImageQuestion> imageQuestions;
     private List<String> imagePaths;
     private Random random;
+    
+    // Map lưu câu hỏi và đáp án theo tên file (không cần regex)
+    private static final Map<String, QuestionAnswerPair> IMAGE_DATA = new HashMap<>();
+    
+    static {
+        // Chỉ cần ghi tên file (không có đường dẫn, có phần mở rộng)
+        IMAGE_DATA.put("image1.jpg", new QuestionAnswerPair("Có bao nhiêu con sứa?", 9));
+        IMAGE_DATA.put("image2.jpg", new QuestionAnswerPair("Có bao nhiêu quả cà chua?", 9));
+        IMAGE_DATA.put("image3.jpg", new QuestionAnswerPair("Có bao nhiêu cái kèn?", 3));
+        IMAGE_DATA.put("image4.jpg", new QuestionAnswerPair("Có bao nhiêu con bọ rùa?", 5));
+        IMAGE_DATA.put("image5.jpg", new QuestionAnswerPair("Có bao nhiêu con vịt cổ xanh?", 3));
+        IMAGE_DATA.put("image6.jpg", new QuestionAnswerPair("Có bao nhiêu cái pizza?", 5));
+        IMAGE_DATA.put("image7.jpg", new QuestionAnswerPair("Có bao nhiêu con gấu bông?", 4));
+        IMAGE_DATA.put("image8.jpg", new QuestionAnswerPair("Có bao nhiêu con cá sấu?", 5));
+        IMAGE_DATA.put("image9.jpg", new QuestionAnswerPair("Có bao nhiêu cái bút lông vẽ?", 9));
+        IMAGE_DATA.put("image10.jpg", new QuestionAnswerPair("Có bao nhiêu xe cứu hỏa?", 6));
+        IMAGE_DATA.put("image11.jpg", new QuestionAnswerPair("Có bao nhiêu quả dâu tây?", 2));
+        
+        // Hỗ trợ thêm .png nếu bạn có ảnh PNG
+        IMAGE_DATA.put("image1.png", new QuestionAnswerPair("Có bao nhiêu con sứa?", 9));
+        IMAGE_DATA.put("image2.png", new QuestionAnswerPair("Có bao nhiêu quả cà chua?", 9));
+        IMAGE_DATA.put("image3.png", new QuestionAnswerPair("Có bao nhiêu cái kèn?", 3));
+        IMAGE_DATA.put("image4.png", new QuestionAnswerPair("Có bao nhiêu con bọ rùa?", 5));
+        IMAGE_DATA.put("image5.png", new QuestionAnswerPair("Có bao nhiêu con vịt cổ xanh?", 3));
+        IMAGE_DATA.put("image6.png", new QuestionAnswerPair("Có bao nhiêu cái pizza?", 5));
+        IMAGE_DATA.put("image7.png", new QuestionAnswerPair("Có bao nhiêu con gấu bông?", 4));
+        IMAGE_DATA.put("image8.png", new QuestionAnswerPair("Có bao nhiêu con cá sấu?", 5));
+        IMAGE_DATA.put("image9.png", new QuestionAnswerPair("Có bao nhiêu cái bút lông vẽ?", 9));
+        IMAGE_DATA.put("image10.png", new QuestionAnswerPair("Có bao nhiêu xe cứu hỏa?", 6));
+        IMAGE_DATA.put("image11.png", new QuestionAnswerPair("Có bao nhiêu quả dâu tây?", 2));
+    }
     
     private ImageQuestionManager() {
         imageQuestions = new HashMap<>();
@@ -76,63 +118,23 @@ public class ImageQuestionManager {
     }
     
     private String generateQuestion(String imageName) {
-        // Temporary question generation - user will update later
-        // For now, assign random questions based on image number
-        if (imageName.contains("image1")) {
-            return "Có bao nhiêu con sứa?";
-        } else if (imageName.contains("image2")) {
-            return "Có bao nhiêu quả cà chua?";
-        } else if (imageName.contains("image3")) {
-            return "Có bao nhiêu cái kèn?";
-        } else if (imageName.contains("image4")) {
-            return "Có bao nhiêu con bọ rùa?";
-        } else if (imageName.contains("image5")) {
-            return "Có bao nhiêu con vịt cổ xanh?";
-        } else if (imageName.contains("image6")) {
-            return "Có bao nhiêu cái pizza?";
-        } else if (imageName.contains("image7")) {
-            return "Có bao nhiêu con gấu bông?";
-        } else if (imageName.contains("image8")) {
-            return "Có bao nhiêu con cá sấu?";
-        } else if (imageName.contains("image9")) {
-            return "Có bao nhiêu cái bút lông vẽ?";
-        } else if (imageName.contains("image10")) {
-            return "Có bao nhiêu xe cứu hỏa?";
-        } else if (imageName.contains("image11")) {
-            return "Có bao nhiêu quả dâu tây?";
-        } else {
-            return "Có bao nhiêu vật thể trong hình?";
+        // Tìm trong Map theo tên file trực tiếp
+        QuestionAnswerPair data = IMAGE_DATA.get(imageName.toLowerCase());
+        if (data != null) {
+            return data.question;
         }
+        // Nếu không tìm thấy, trả về câu hỏi mặc định
+        return "Có bao nhiêu vật thể trong hình?";
     }
     
     private int generateAnswer(String imageName) {
-        // Temporary answer generation - user will update later
-        // For now, assign random answers based on image number
-        if (imageName.contains("image1")) {
-            return 9;
-        } else if (imageName.contains("image2")) {
-            return 9;
-        } else if (imageName.contains("image3")) {
-            return 3;
-        } else if (imageName.contains("image4")) {
-            return 5;
-        } else if (imageName.contains("image5")) {
-            return 3;
-        } else if (imageName.contains("image6")) {
-            return 5;
-        } else if (imageName.contains("image7")) {
-            return 4;
-        } else if (imageName.contains("image8")) {
-            return 5;
-        } else if (imageName.contains("image9")) {
-            return 9;
-        } else if (imageName.contains("image10")) {
-            return 6;
-        } else if (imageName.contains("image11")) {
-            return 2;
-        } else {
-            return random.nextInt(10) + 1;
+        // Tìm trong Map theo tên file trực tiếp
+        QuestionAnswerPair data = IMAGE_DATA.get(imageName.toLowerCase());
+        if (data != null) {
+            return data.answer;
         }
+        // Nếu không tìm thấy, trả về đáp án ngẫu nhiên
+        return random.nextInt(10) + 1;
     }
     
     public ImageQuestion getRandomImageQuestion() {

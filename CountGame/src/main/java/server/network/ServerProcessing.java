@@ -202,9 +202,14 @@ public class ServerProcessing extends Thread {
                                 Boolean wantsPlayAgain = (Boolean) data.getData();
                                 this.playAgainResponse = wantsPlayAgain;
                                 System.out.println("Server: " + this.username + " play again response: " + wantsPlayAgain);
+                                System.out.println("Server: " + this.username + " - isInviter=" + isInviter + 
+                                                 ", enemy=" + enemy.username + ", enemy.isInviter=" + enemy.isInviter);
                                 
                                 // Check if both players have responded
+                                // Call handlePlayAgainDecision() - it has synchronized blocks to prevent race conditions
+                                // Only the inviter (or fallback logic) will actually create the game controller
                                 if (this.playAgainResponse != null && enemy.playAgainResponse != null) {
+                                    System.out.println("Server: Both players responded, calling handlePlayAgainDecision() from " + this.username);
                                     handlePlayAgainDecision();
                                 }
                             }
@@ -596,13 +601,21 @@ public class ServerProcessing extends Thread {
     
     private void handlePlayAgainDecision() {
         if (enemy == null) {
+            System.err.println("Server: handlePlayAgainDecision() called but enemy is null for " + username);
             return;
         }
         
         synchronized (this) {
             synchronized (enemy) {
+                System.out.println("Server: handlePlayAgainDecision() - " + username + ": isInviter=" + isInviter + 
+                                 ", playAgainResponse=" + playAgainResponse + 
+                                 ", enemy=" + enemy.username + 
+                                 ", enemy.isInviter=" + enemy.isInviter + 
+                                 ", enemy.playAgainResponse=" + enemy.playAgainResponse);
+                
                 // Check if both want to play again
-                if (this.playAgainResponse && enemy.playAgainResponse) {
+                if (this.playAgainResponse != null && this.playAgainResponse && 
+                    enemy.playAgainResponse != null && enemy.playAgainResponse) {
                     System.out.println("Server: Both players want to play again, starting new game");
                     
                     // Reset play again responses
@@ -613,10 +626,22 @@ public class ServerProcessing extends Thread {
                     sendData(new ObjectWrapper(ObjectWrapper.SERVER_START_NEW_GAME));
                     enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_START_NEW_GAME));
                     
+                    System.out.println("Server: SERVER_START_NEW_GAME sent to both players");
+                    System.out.println("Server: Checking inviter - " + username + ": isInviter=" + isInviter + 
+                                     ", " + enemy.username + ": isInviter=" + enemy.isInviter);
+                    
                     // Keep enemy reference and start new game
                     // Create new game controller - only inviter creates it
+                    // IMPORTANT: Only create game controller once, from the thread of the inviter
                     if (isInviter) {
                         System.out.println("Server: " + this.username + " is inviter, creating new game controller");
+                        
+                        // Double check enemy reference is still valid
+                        if (enemy == null || enemy.imageQuizGameCtr != null) {
+                            System.err.println("Server: ERROR - enemy is null or already has game controller");
+                            return;
+                        }
+                        
                         imageQuizGameCtr = new ImageQuizGameCtr(this.username, enemy.username);
                         enemy.imageQuizGameCtr = imageQuizGameCtr;
                         
@@ -629,18 +654,45 @@ public class ServerProcessing extends Thread {
                             public void run() {
                                 System.out.println("Server: Starting first round of new game for " + username + " and " + enemy.username);
                                 System.out.println("Server: imageQuizGameCtr is " + (imageQuizGameCtr != null ? "not null" : "null"));
-                                System.out.println("Server: enemy.imageQuizGameCtr is " + (enemy.imageQuizGameCtr != null ? "not null" : "null"));
-                                startImageQuizRound();
+                                System.out.println("Server: enemy.imageQuizGameCtr is " + (enemy != null && enemy.imageQuizGameCtr != null ? "not null" : "null"));
+                                
+                                if (imageQuizGameCtr != null && enemy != null) {
+                                    startImageQuizRound();
+                                } else {
+                                    System.err.println("Server: ERROR - Cannot start round, imageQuizGameCtr or enemy is null");
+                                }
                             }
                         }, 1000);
+                    } else if (enemy.isInviter) {
+                        System.out.println("Server: " + enemy.username + " is inviter, they will create game controller");
+                        // Enemy will create the game controller and start the round in their handlePlayAgainDecision()
                     } else {
-                        System.out.println("Server: " + enemy.username + " is inviter, waiting for them to create game controller");
-                        // Enemy will create the game controller and start the round
+                        System.err.println("Server: ERROR - Neither player is inviter! " + username + ": isInviter=" + isInviter + 
+                                         ", " + enemy.username + ": isInviter=" + enemy.isInviter);
+                        // Fallback: make the first player the inviter
+                        System.out.println("Server: Making " + username + " the inviter as fallback");
+                        this.isInviter = true;
+                        enemy.isInviter = false;
+                        
+                        imageQuizGameCtr = new ImageQuizGameCtr(this.username, enemy.username);
+                        enemy.imageQuizGameCtr = imageQuizGameCtr;
+                        
+                        Timer startGameTimer = new Timer();
+                        startGameTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (imageQuizGameCtr != null && enemy != null) {
+                                    startImageQuizRound();
+                                }
+                            }
+                        }, 1000);
                     }
                     
                 } else {
                     // At least one player declined
                     System.out.println("Server: At least one player declined play again");
+                    System.out.println("Server: " + username + " response: " + playAgainResponse + 
+                                     ", " + enemy.username + " response: " + enemy.playAgainResponse);
                     
                     // Reset play again responses
                     this.playAgainResponse = null;

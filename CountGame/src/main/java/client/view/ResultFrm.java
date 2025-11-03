@@ -27,6 +27,7 @@ public class ResultFrm  {
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
     private boolean waitingForPlayAgainResponse = false;
+    private Dialog<ButtonType> playAgainDialog = null; // Reference to dialog để đóng khi một người chọn NO
 
     public ResultFrm() {
     }
@@ -63,9 +64,19 @@ public class ResultFrm  {
                     break;
                     
                 case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
-                    // One player declined
+                    // One player declined - close dialog and stay on result screen
                     Platform.runLater(() -> {
-                        showDeclinedNotification();
+                        // Close dialog if it's open
+                        if (playAgainDialog != null) {
+                            try {
+                                playAgainDialog.close();
+                            } catch (Exception e) {
+                                // Dialog might already be closed
+                            }
+                            playAgainDialog = null;
+                        }
+                        waitingForPlayAgainResponse = false;
+                        // Stay on result screen, no notification needed
                     });
                     break;
                     
@@ -106,7 +117,9 @@ public class ResultFrm  {
                             btnLoseGo.setOnAction(e -> {
                                 clicBackMain();
                                 clickButtonPlayer.stop();
-                                showPlayAgainDialog();
+                                // Quay về trang home/main
+                                mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
+                                mySocket.getMainFrm().openScene();
                             });
                             stage.setScene(lossScene);
                         } catch (IOException e) {
@@ -152,7 +165,9 @@ public class ResultFrm  {
                             btnWinGo.setOnAction(e -> {
                                 clicBackMain();
                                 clickButtonPlayer.stop();
-                                showPlayAgainDialog();
+                                // Quay về trang home/main
+                                mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
+                                mySocket.getMainFrm().openScene();
                             });
                             stage.setScene(winScene);
                         } catch (IOException e) {
@@ -181,12 +196,22 @@ public class ResultFrm  {
         waitingForPlayAgainResponse = true;
         
         Platform.runLater(() -> {
+            // Close existing dialog if any
+            if (playAgainDialog != null) {
+                try {
+                    playAgainDialog.close();
+                } catch (Exception e) {
+                    // Ignore
+                }
+                playAgainDialog = null;
+            }
+            
             // Create custom dialog
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.initOwner(stage);
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initStyle(StageStyle.TRANSPARENT);
-            dialog.setTitle("Play Again");
+            playAgainDialog = new Dialog<>();
+            playAgainDialog.initOwner(stage);
+            playAgainDialog.initModality(Modality.APPLICATION_MODAL);
+            playAgainDialog.initStyle(StageStyle.TRANSPARENT);
+            playAgainDialog.setTitle("Play Again");
             
             // Content
             VBox content = new VBox(15);
@@ -201,62 +226,35 @@ public class ResultFrm  {
             
             content.getChildren().addAll(titleLabel, messageLabel);
             
-            dialog.getDialogPane().setContent(content);
-            dialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
+            playAgainDialog.getDialogPane().setContent(content);
+            playAgainDialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
             
             // Buttons
             ButtonType yesButtonType = new ButtonType("Yes", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
             ButtonType noButtonType = new ButtonType("No", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
-            dialog.getDialogPane().getButtonTypes().addAll(yesButtonType, noButtonType);
+            playAgainDialog.getDialogPane().getButtonTypes().addAll(yesButtonType, noButtonType);
             
             // Style buttons
-            Button yesButton = (Button) dialog.getDialogPane().lookupButton(yesButtonType);
+            Button yesButton = (Button) playAgainDialog.getDialogPane().lookupButton(yesButtonType);
             yesButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'Be Vietnam Pro';");
             
-            Button noButton = (Button) dialog.getDialogPane().lookupButton(noButtonType);
+            Button noButton = (Button) playAgainDialog.getDialogPane().lookupButton(noButtonType);
             noButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'Be Vietnam Pro';");
             
-            // Handle result
-            dialog.showAndWait().ifPresent(response -> {
+            // Handle result - No timeout, wait indefinitely for user response
+            playAgainDialog.showAndWait().ifPresent(response -> {
                 waitingForPlayAgainResponse = false;
                 if (response == yesButtonType) {
                     // User wants to play again
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, true));
                 } else {
-                    // User declined
+                    // User declined - stay on result screen, don't go back to main
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, false));
-                    // Go back to main
-                    mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
-                    mySocket.getMainFrm().openScene();
+                    // Note: Dialog is already closed by showAndWait(), user stays on result screen
                 }
+                playAgainDialog = null;
             });
         });
     }
     
-    private void showDeclinedNotification() {
-        Platform.runLater(() -> {
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.initOwner(stage);
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.setTitle("Play Again Declined");
-            
-            VBox content = new VBox(15);
-            content.setStyle("-fx-background-color: white; -fx-background-radius: 15px; -fx-padding: 25px; -fx-alignment: center;");
-            
-            Label messageLabel = new Label("Your opponent declined to play again.\nReturning to main screen...");
-            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-text-alignment: center; -fx-font-family: 'Be Vietnam Pro';");
-            
-            content.getChildren().add(messageLabel);
-            dialog.getDialogPane().setContent(content);
-            
-            ButtonType okButtonType = new ButtonType("OK", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().add(okButtonType);
-            
-            dialog.showAndWait();
-            
-            // Go back to main
-            mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
-            mySocket.getMainFrm().openScene();
-        });
-    }
 }
