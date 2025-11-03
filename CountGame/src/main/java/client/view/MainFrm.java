@@ -12,8 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
@@ -29,8 +27,6 @@ import javafx.application.Platform;
 import shared.dto.PlayerHistory;
 import shared.model.Match;
 import shared.model.Player;
-
-import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -39,7 +35,6 @@ public class MainFrm {
 
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
-    MediaPlayer backgroundMusicPlayer;
 
     public MainFrm() {
     }
@@ -109,8 +104,6 @@ public class MainFrm {
                         btnRanked.setStyle("-fx-text-fill: rgba(217, 223, 165, 0.7);" +
                                 "-fx-background-color: transparent;");
 
-                        audioClickButton();
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -134,8 +127,6 @@ public class MainFrm {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    audioClickButton();
                 });
                 // Xu ly su kien click vao button Ranking
 
@@ -156,8 +147,6 @@ public class MainFrm {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    audioClickButton();
                 });
 
                 //client send request to server to get all user
@@ -166,11 +155,9 @@ public class MainFrm {
                 //button logout
                 Button btnLogout = (Button) loader.getNamespace().get("btnLogout");
                 btnLogout.setOnAction(event -> {
-                    audioClickButtonLogout();
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.EXIT_MAIN_FORM, null));
                     mySocket.setMainScene(null);
                     mySocket.setLoginScreen(null);
-                    backgroundMusicPlayer.stop();
 
                     LoginFrm loginFrm = new LoginFrm();
                     mySocket.setLoginFrm(loginFrm);
@@ -189,8 +176,6 @@ public class MainFrm {
                 e.printStackTrace();
             }
         });
-        // Khởi tạo âm thanh nen
-        initializeBackgroundMusic();
     }
 
     public void receivedDataProcessing(ObjectWrapper data) {
@@ -315,7 +300,6 @@ public class MainFrm {
 
                             btnInvite.setOnAction(event -> {
                                 mySocket.sendData(new ObjectWrapper(ObjectWrapper.SEND_PLAY_REQUEST, namePlayer));
-                                audioClickButton();
                             });
 
 
@@ -420,7 +404,6 @@ public class MainFrm {
                         // Xu ly su kien click vao button Accept: chap nhan loi moi choi
                         Button btnAccept = (Button) itemUser.lookup("#btnAccept");
                         btnAccept.setOnAction(event -> {
-                            audioBeep();
                             mySocket.sendData(new ObjectWrapper(ObjectWrapper.ACCEPTED_PLAY_REQUEST));
                             receivePlayRequest.getChildren().remove(itemUser);
                         });
@@ -428,7 +411,6 @@ public class MainFrm {
                         // Xu ly su kien click vao button Reject: tu choi loi moi choi
                         Button btnReject = (Button) itemUser.lookup("#btnReject");
                         btnReject.setOnAction(event -> {
-                            audioBeep();
                             mySocket.sendData(new ObjectWrapper(ObjectWrapper.REJECTED_PLAY_REQUEST));
                             receivePlayRequest.getChildren().remove(itemUser);
                         });
@@ -437,7 +419,6 @@ public class MainFrm {
                         e.printStackTrace();
                     }
 
-                    audioNotification();
                     break;
 
                 case ObjectWrapper.SERVER_SEND_HISTORY:
@@ -574,7 +555,6 @@ public class MainFrm {
                         mySocket.getWaitingFrm().setIsInviter(isInviter);
                     }
                     mySocket.getWaitingFrm().openScene();
-                    backgroundMusicPlayer.stop();
                     break;
 
             }
@@ -582,51 +562,6 @@ public class MainFrm {
 
     }
 
-    public void initializeBackgroundMusic(){
-        // tao am thanh nen
-        String backgroundMusicFile = new File("src/main/resources/Sounds/backgroundMusic.mp3").toURI().toString();
-        Media backgroundMusic = new Media(backgroundMusicFile);
-        backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
-
-        backgroundMusicPlayer.setVolume(0.1);
-        backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
-        // Thêm error handler
-        backgroundMusicPlayer.setOnError(() -> {
-            System.out.println("Media error occurred: " + backgroundMusicPlayer.getError());
-        });
-
-        // Thêm status listener để debug
-        backgroundMusicPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Status changed from " + oldValue + " to " + newValue);
-        });
-
-        backgroundMusicPlayer.play();
-    }
-
-    public void audioClickButton(){
-        String clickButtonFile = new File("src/main/resources/Sounds/clickButton.mp3").toURI().toString();
-        Media clickButton = new Media(clickButtonFile);
-        MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-        clickButtonPlayer.setVolume(0.8);
-        clickButtonPlayer.play();
-    }
-
-    public void audioNotification(){
-        String notificationFile = new File("src/main/resources/Sounds/notification.mp3").toURI().toString();
-        Media notification = new Media(notificationFile);
-        MediaPlayer notificationPlayer = new MediaPlayer(notification);
-        notificationPlayer.setVolume(1);
-        notificationPlayer.play();
-    }
-
-    public void audioBeep(){
-        String beepFile = new File("src/main/resources/Sounds/beeping.mp3").toURI().toString();
-        Media beep = new Media(beepFile);
-        MediaPlayer beepPlayer = new MediaPlayer(beep);
-        beepPlayer.setVolume(1);
-        beepPlayer.play();
-    }
 
     public void setUIrank(VBox vboxRanked, ArrayList<PlayerHistory> listPlayer, String rank, ImageView imgRank) {
         Platform.runLater(() -> {
@@ -746,12 +681,5 @@ public class MainFrm {
         });
     }
 
-    public void audioClickButtonLogout(){
-        String clickButtonFile = new File("src/main/resources/Sounds/click-233950.mp3").toURI().toString();
-        Media clickButton = new Media(clickButtonFile);
-        MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-        clickButtonPlayer.setVolume(0.8);
-        clickButtonPlayer.play();
-    }
 
 }

@@ -11,14 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import shared.dto.ObjectWrapper;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -33,9 +30,6 @@ public class ResultFrm  {
     }
 
     public void openScene() {
-        // Khởi tạo âm thanh trước
-//        initializeBackgroundMusic();
-
         // Sau đó xử lý UI trong Platform.runLater
         Platform.runLater(() -> {
             try {
@@ -90,12 +84,6 @@ public class ResultFrm  {
                     if (result.equals("loss")) {
                         FXMLLoader loss = new FXMLLoader(getClass().getResource("/Fxml/Client/Lose.fxml"));
                         try {
-                            String clickButtonFile = new File("src/main/resources/Sounds/lose.mp3").toURI().toString();
-                            Media clickButton = new Media(clickButtonFile);
-                            MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-                            clickButtonPlayer.setVolume(0.8);
-                            clickButtonPlayer.play();
-
                             Scene lossScene = new Scene(loss.load());
                             mySocket.setResultScene(lossScene);
                             stage.setScene(lossScene);
@@ -116,7 +104,6 @@ public class ResultFrm  {
                             Button btnLoseGo = (Button) loss.getNamespace().get("btnPlayAgainLose");
                             btnLoseGo.setOnAction(e -> {
                                 clicBackMain();
-                                clickButtonPlayer.stop();
                                 // Quay về trang home/main
                                 mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
                                 mySocket.getMainFrm().openScene();
@@ -128,12 +115,6 @@ public class ResultFrm  {
                     } else {
                         FXMLLoader win = new FXMLLoader(getClass().getResource("/Fxml/Client/Win.fxml"));
                         try {
-                            String clickButtonFile = new File("src/main/resources/Sounds/win.mp3").toURI().toString();
-                            Media clickButton = new Media(clickButtonFile);
-                            MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-                            clickButtonPlayer.setVolume(0.8);
-                            clickButtonPlayer.play();
-
                             Scene winScene  = new Scene(win.load());
                             mySocket.setResultScene(winScene);
                             stage.setScene(winScene);
@@ -164,7 +145,6 @@ public class ResultFrm  {
                             Button btnWinGo = (Button) win.getNamespace().get("btnPlayAgainWin");
                             btnWinGo.setOnAction(e -> {
                                 clicBackMain();
-                                clickButtonPlayer.stop();
                                 // Quay về trang home/main
                                 mySocket.sendData(new ObjectWrapper(ObjectWrapper.BACK_TO_MAIN_FORM));
                                 mySocket.getMainFrm().openScene();
@@ -181,11 +161,7 @@ public class ResultFrm  {
 
 
     public void clicBackMain () {
-        String clickButtonFile = new File("src/main/resources/Sounds/buttonBackMain.mp3").toURI().toString();
-        Media clickButton = new Media(clickButtonFile);
-        MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-        clickButtonPlayer.setVolume(0.8);
-        clickButtonPlayer.play();
+        // Sound removed
     }
     
     private void showPlayAgainDialog() {

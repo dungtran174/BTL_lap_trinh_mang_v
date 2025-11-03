@@ -12,7 +12,6 @@ module com.ltm.countgame {
     requires com.almasb.fxgl.all;
     requires java.desktop;
     requires java.sql;
-    requires javafx.media;
 
 //    opens client.controller to javafx.fxml;
 

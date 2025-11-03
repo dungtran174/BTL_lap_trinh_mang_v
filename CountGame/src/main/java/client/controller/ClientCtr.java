@@ -3,8 +3,6 @@ package client.controller;
 import client.network.ClientListening;
 import client.view.*;
 import javafx.scene.Scene;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import shared.dto.IPAddress;
 import shared.dto.ObjectWrapper;
@@ -13,7 +11,6 @@ import shared.model.Player;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import javafx.scene.media.MediaPlayer;
 
 public class ClientCtr {
 
@@ -29,7 +26,6 @@ public class ClientCtr {
     private String username;
     private Stage stage;
     private int points;
-    private MediaPlayer backgroundMusicPlayer;
 
     private ConnectFrm connectFrm;
     private LoginFrm loginFrm;
@@ -235,13 +231,6 @@ public class ClientCtr {
 
     public void setRegisterScene(Scene registerScene) {this.registerScene = registerScene;}
 
-    public MediaPlayer getBackgroundMusicPlayer() {
-        return backgroundMusicPlayer;
-    }
-
-    public void setBackgroundMusicPlayer(MediaPlayer backgroundMusicPlayer) {
-        this.backgroundMusicPlayer = backgroundMusicPlayer;
-    }
 
     public void setPoints(int points) {
         this.points = points;

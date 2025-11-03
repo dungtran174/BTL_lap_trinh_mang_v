@@ -1,30 +1,23 @@
 package client.view;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 
 import shared.dto.ObjectWrapper;
 import client.controller.ClientCtr;
-import static javafx.application.Application.launch;
 import javafx.scene.control.Label;
 import shared.model.Player;
-
-import java.io.File;
 
 public class RegisterFrm {
 
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
-    MediaPlayer backgroundMusicPlayer;
 
     public RegisterFrm() {
     }
@@ -55,7 +48,6 @@ public class RegisterFrm {
 
             // Set up click event handlers
             registerBtn.setOnAction(event -> {
-                audioClickButton();
                 // Handle login button click
                 String username = usernameTxt.getText();
                 String password = passwordTxt.getText();
@@ -84,20 +76,16 @@ public class RegisterFrm {
                 Player player = new Player();
                 player.setUsername(username);
                 player.setPassword(password);
-                backgroundMusicPlayer.stop();
                 mySocket.sendData(new ObjectWrapper(ObjectWrapper.REGISTER_USER, player));
             });
 
             LoginBtn.setOnAction(event -> {
-                audioClickButton();
                 if (mySocket.getLoginFrm()== null) {
                     LoginFrm loginFrm = new LoginFrm();
                     mySocket.setLoginFrm(loginFrm);
                 }
-                backgroundMusicPlayer.stop();
                 mySocket.getLoginFrm().openScene();
             });
-            initializeBackgroundMusic();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,33 +112,4 @@ public class RegisterFrm {
 
     }
 
-    public void initializeBackgroundMusic(){
-        // tao am thanh nen
-        String backgroundMusicFile = new File("src/main/resources/Sounds/login.mp3").toURI().toString();
-        Media backgroundMusic = new Media(backgroundMusicFile);
-        backgroundMusicPlayer = new MediaPlayer(backgroundMusic);
-
-        backgroundMusicPlayer.setVolume(0.5);
-        backgroundMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-
-        // Thêm error handler
-        backgroundMusicPlayer.setOnError(() -> {
-            System.out.println("Media error occurred: " + backgroundMusicPlayer.getError());
-        });
-
-        // Thêm status listener để debug
-        backgroundMusicPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Status changed from " + oldValue + " to " + newValue);
-        });
-
-        backgroundMusicPlayer.play();
-    }
-
-    public void audioClickButton(){
-        String clickButtonFile = new File("src/main/resources/Sounds/click-233950.mp3").toURI().toString();
-        Media clickButton = new Media(clickButtonFile);
-        MediaPlayer clickButtonPlayer = new MediaPlayer(clickButton);
-        clickButtonPlayer.setVolume(0.8);
-        clickButtonPlayer.play();
-    }
 }
