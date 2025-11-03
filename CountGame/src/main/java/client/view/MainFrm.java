@@ -686,7 +686,7 @@ public class MainFrm {
             try {
                 // Đợi một chút để scene load xong
                 Timeline delay = new Timeline(new KeyFrame(Duration.millis(300), e -> {
-                    showNotification("Đối thủ " + leftPlayerUsername + " đã rời khỏi trận");
+                    showNotification("Opponent " + leftPlayerUsername + " has left the game");
                 }));
                 delay.play();
             } catch (Exception ex) {

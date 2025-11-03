@@ -81,27 +81,27 @@ public class ImageQuestionManager {
         if (imageName.contains("image1")) {
             return "Có bao nhiêu con sứa?";
         } else if (imageName.contains("image2")) {
-            return "Có bao nhiêu con cá?";
+            return "Có bao nhiêu quả cà chua?";
         } else if (imageName.contains("image3")) {
-            return "Có bao nhiêu con chim?";
+            return "Có bao nhiêu cái kèn?";
         } else if (imageName.contains("image4")) {
-            return "Có bao nhiêu con mèo?";
+            return "Có bao nhiêu con bọ rùa?";
         } else if (imageName.contains("image5")) {
-            return "Có bao nhiêu con chó?";
+            return "Có bao nhiêu con vịt cổ xanh?";
         } else if (imageName.contains("image6")) {
-            return "Có bao nhiêu quả táo?";
+            return "Có bao nhiêu cái pizza?";
         } else if (imageName.contains("image7")) {
-            return "Có bao nhiêu quả cam?";
+            return "Có bao nhiêu con gấu bông?";
         } else if (imageName.contains("image8")) {
-            return "Có bao nhiêu cái bánh?";
+            return "Có bao nhiêu con cá sấu?";
         } else if (imageName.contains("image9")) {
-            return "Có bao nhiêu ngôi sao?";
+            return "Có bao nhiêu cái bút lông vẽ?";
         } else if (imageName.contains("image10")) {
-            return "Có bao nhiêu trái tim?";
+            return "Có bao nhiêu xe cứu hỏa?";
         } else if (imageName.contains("image11")) {
-            return "Có bao nhiêu hình tròn?";
+            return "Có bao nhiêu quả dâu tây?";
         } else {
-            return "Có bao nhiêu đồ vật?";
+            return "Có bao nhiêu vật thể trong hình?";
         }
     }
     
@@ -111,25 +111,25 @@ public class ImageQuestionManager {
         if (imageName.contains("image1")) {
             return 9;
         } else if (imageName.contains("image2")) {
-            return 5;
+            return 9;
         } else if (imageName.contains("image3")) {
-            return 7;
-        } else if (imageName.contains("image4")) {
             return 3;
+        } else if (imageName.contains("image4")) {
+            return 5;
         } else if (imageName.contains("image5")) {
-            return 6;
+            return 3;
         } else if (imageName.contains("image6")) {
-            return 4;
+            return 5;
         } else if (imageName.contains("image7")) {
-            return 8;
+            return 4;
         } else if (imageName.contains("image8")) {
-            return 2;
+            return 5;
         } else if (imageName.contains("image9")) {
-            return 10;
+            return 9;
         } else if (imageName.contains("image10")) {
             return 6;
         } else if (imageName.contains("image11")) {
-            return 5;
+            return 2;
         } else {
             return random.nextInt(10) + 1;
         }

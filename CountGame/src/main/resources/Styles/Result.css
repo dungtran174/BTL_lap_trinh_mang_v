@@ -1,5 +1,6 @@
 .btlNext {
     -fx-background-color: transparent;
+    -fx-cursor: hand;
 }
 
 .btlNext:hover {

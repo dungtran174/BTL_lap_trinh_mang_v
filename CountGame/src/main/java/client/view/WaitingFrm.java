@@ -39,13 +39,13 @@ public class WaitingFrm {
                 Button btnStart = (Button) scene.lookup("#btnStart");
                 
                 if (isInviter) {
-                    waitingLabel.setText("Chờ đối thủ sẵn sàng...\nNhấn Start để bắt đầu!");
+                    waitingLabel.setText("Press Start to begin!");
                     btnStart.setVisible(true);
                     btnStart.setOnAction(event -> {
                         mySocket.sendData(new ObjectWrapper(ObjectWrapper.START_IMAGE_QUIZ_GAME));
                     });
                 } else {
-                    waitingLabel.setText("Chờ đối thủ bắt đầu game...");
+                    waitingLabel.setText("Waiting for opponent to start the game...");
                     btnStart.setVisible(false);
                 }
                 

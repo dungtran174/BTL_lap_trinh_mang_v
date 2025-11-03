@@ -6,7 +6,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -14,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -65,40 +63,56 @@ public class ImageQuizFrm {
     
     private void handleLeaveGame() {
         Platform.runLater(() -> {
-            // Tạo custom dialog đẹp hơn
+            // Tạo custom dialog đẹp hơn với bo góc
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Xác nhận rời trận");
             dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initStyle(StageStyle.UTILITY);
+            dialog.initStyle(StageStyle.TRANSPARENT);
             
-            // Tạo nội dung dialog
-            VBox content = new VBox(15);
-            content.setStyle("-fx-padding: 20px; -fx-alignment: center; -fx-background-color: #f5f5f5;");
+            // Tạo nội dung dialog với bo góc đẹp
+            VBox content = new VBox(20);
+            content.setStyle("-fx-padding: 30px; -fx-alignment: center; -fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);");
             
-            Label iconLabel = new Label("⚠️");
-            iconLabel.setStyle("-fx-font-size: 48px; -fx-padding: 10px;");
+            // Sử dụng ảnh err.png làm icon
+            ImageView iconView = new ImageView();
+            try {
+                Image errImage = new Image(getClass().getResource("/Images/err.png").toExternalForm());
+                iconView.setImage(errImage);
+                iconView.setFitHeight(60);
+                iconView.setFitWidth(60);
+                iconView.setPreserveRatio(true);
+                content.getChildren().add(iconView);
+            } catch (Exception e) {
+                // Fallback nếu không load được ảnh
+                e.printStackTrace();
+                Label iconLabel = new Label("⚠️");
+                iconLabel.setStyle("-fx-font-size: 48px; -fx-padding: 10px;");
+                content.getChildren().add(iconLabel);
+            }
             
-            Label titleLabel = new Label("Rời trận");
-            titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f44336;");
+            Label titleLabel = new Label("Leave Game");
+            titleLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #f44336; -fx-font-family: 'JejuHallasan';");
             
-            Label messageLabel = new Label("Nếu rời trận bạn sẽ bị trừ 1 điểm.\nBạn có chắc chắn muốn rời trận?");
-            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center;");
+            Label messageLabel = new Label("If you leave, you will lose 1 point.\nAre you sure you want to leave?");
+            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'JejuHallasan';");
             messageLabel.setMaxWidth(400);
             
-            content.getChildren().addAll(iconLabel, titleLabel, messageLabel);
+            content.getChildren().addAll(titleLabel, messageLabel);
+            
             dialog.getDialogPane().setContent(content);
+            dialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
             
             // Tạo buttons
-            ButtonType confirmButtonType = new ButtonType("Xác nhận", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButtonType = new ButtonType("Hủy", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType confirmButtonType = new ButtonType("Confirm", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButtonType = new ButtonType("Cancel", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
             dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, cancelButtonType);
             
-            // Style cho buttons
+            // Style cho buttons với bo góc
             Button confirmButton = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
-            confirmButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 8px 20px;");
+            confirmButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'JejuHallasan';");
             
             Button cancelButton = (Button) dialog.getDialogPane().lookupButton(cancelButtonType);
-            cancelButton.setStyle("-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 8px 20px;");
+            cancelButton.setStyle("-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10px; -fx-padding: 10px 25px; -fx-cursor: hand; -fx-font-family: 'JejuHallasan';");
             
             // Xử lý kết quả
             dialog.showAndWait().ifPresent(response -> {
@@ -394,12 +408,12 @@ public class ImageQuizFrm {
                 // Show round result
                 Label lblResult = (Label) scene.lookup("#lblResult");
                 if (lblResult != null) {
-                    String resultText = "Round " + roundNumber + " kết thúc!\n";
-                    resultText += "Đáp án đúng: " + correctAnswer + "\n";
-                    resultText += "Điểm của bạn: " + currentMyScore + "\n";
-                    resultText += "Điểm đối thủ: " + currentEnemyScore;
+                    String resultText = "Round " + roundNumber + " finished!\n";
+                    resultText += "Correct answer: " + correctAnswer + "\n";
+                    resultText += "Your score: " + currentMyScore + "\n";
+                    resultText += "Opponent score: " + currentEnemyScore;
                     if (gameFinished) {
-                        resultText += "\n\nGame kết thúc!";
+                        resultText += "\n\nGame finished!";
                     }
                     lblResult.setText(resultText);
                     lblResult.setVisible(true);
@@ -427,12 +441,12 @@ public class ImageQuizFrm {
                 
                 Label lblMyScore = (Label) scene.lookup("#lblMyScore");
                 if (lblMyScore != null) {
-                    lblMyScore.setText(String.format("Điểm của bạn: %.1f", currentMyScore));
+                    lblMyScore.setText(String.format("Your Score: %.1f", currentMyScore));
                 }
                 
                 Label lblEnemyScore = (Label) scene.lookup("#lblEnemyScore");
                 if (lblEnemyScore != null) {
-                    lblEnemyScore.setText(String.format("Điểm đối thủ: %.1f", currentEnemyScore));
+                    lblEnemyScore.setText(String.format("Opponent Score: %.1f", currentEnemyScore));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
