@@ -23,16 +23,6 @@
             <Image url="@../../Images/flagChallenger.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="133.0" fitWidth="158.0" layoutX="339.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../Images/shigure-ui-dance.gif" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="119.0" fitWidth="139.0" layoutX="38.0" layoutY="318.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../Images/96yuku-dance.gif" />
-         </image>
-      </ImageView>
       <Label fx:id="lblPointChange" layoutX="212.0" layoutY="378.0" styleClass="pointChangeWin" text="+1 POINT" />
       <Label fx:id="lblPointWin" layoutX="598.0" layoutY="292.0" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" styleClass="point" text="1000" />
       <Button fx:id="btnPlayAgainWin" layoutX="234.0" layoutY="437.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="70.0" styleClass="btlNext">

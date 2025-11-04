@@ -30,32 +30,38 @@
 }
 
 .text-lable {
-    -fx-text-fill: rgb(237, 86, 86);
+    -fx-text-fill: #FF3D3D;
     -fx-font-size: 15px;
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);
 }
 
 .menu-button-main{
     -fx-background-color: rgba(255, 23, 23, 0);
-    -fx-text-fill: rgba(217, 223, 165, 0.7);
+    -fx-text-fill: #FFD700;
     -fx-font-size: 14px;
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);
 }
 
 .item-user-mini{
     --fx-background-color: rgba(255, 23, 23, 0);
-    -fx-text-fill: rgba(217, 223, 165, 1);
+    -fx-text-fill: #FFD700;
     -fx-font-size: 13px;
     -fx-font-family: "Segoe Script Bold";
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);
 }
 
 .menu-button-main:hover {
     -fx-background-color: rgba(255, 23, 23, 0);
-    -fx-text-fill: rgba(234, 251, 2, 0.7);
+    -fx-text-fill: #FFEB3B;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 4, 0, 0, 1);
 }
 
 .avatar-main-user {
@@ -78,17 +84,22 @@
 }
 
 .blb_status{
-    -fx-text-fill: rgb(96, 197, 142);
+    -fx-text-fill: #4CAF50;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);
 }
 
 .buttom-check{
     -fx-background-color: rgba(255, 255, 255, 0);
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);
 }
 
 
 .texhUserMain{
-    -fx-text-fill: rgb(234, 251, 2);
+    -fx-text-fill: #FFD700;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);
 }
 
 .tran{
@@ -104,9 +115,11 @@
 }
 
 .userInvitePlayGame{
-    -fx-text-fill: rgb(251, 57, 57);
+    -fx-text-fill: #FF1744;
     -fx-font-size: 11px;
     -fx-font-family: "Be Vietnam Pro";
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);
 }
 
 .itemsUserHome{
@@ -131,5 +144,21 @@
 /* Tùy chỉnh khi nút cuộn được nhấn */
 .scroll-pane .scroll-bar .thumb:pressed {
     -fx-background-color: rgba(246, 192, 123, 0.67); /* Màu nút cuộn khi nhấn */
+}
+
+/* Làm nổi bật các icon */
+.menu-button-main .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);
+}
+
+/* Thêm style cho icon trong button */
+Button .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0, 0, 1);
+}
+
+/* Style cho status label (Online/Offline) */
+Label#statusItem {
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);
 }
 

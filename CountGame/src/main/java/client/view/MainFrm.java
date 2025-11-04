@@ -223,6 +223,7 @@ public class MainFrm {
                             lblUserName.setText(player.getUsername());
                             lblStatus.setText("Offline");
                             circleStatus.setStyle("-fx-stroke: #262825");
+                            lblStatus.setStyle("-fx-text-fill: #9E9E9E; -fx-font-weight: 700; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);");
                             btnInvite.setVisible(false);
 
                             screnListUser.getChildren().add(itemUser);
@@ -320,7 +321,7 @@ public class MainFrm {
 
                             if(mapUserStatus.get(namePlayer).equals("Online")) {
                                 circleStatus.setStyle("-fx-stroke: #00ff00");
-                                lblStatus.setStyle("-fx-text-fill: #4a8f4a");
+                                lblStatus.setStyle("-fx-text-fill: #4CAF50; -fx-font-weight: 700; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);");
                                 btnInvite.setVisible(true);
                                 if(mapstatusInvite.containsKey(namePlayer)) {
                                     Pair<Label, Circle> pair = mapstatusInvite.get(namePlayer);
@@ -336,7 +337,7 @@ public class MainFrm {
 
                             } else if(mapUserStatus.get(namePlayer).equals("In Game")) {
                                 circleStatus.setStyle("-fx-stroke: #584ee6");
-                                lblStatus.setStyle("-fx-text-fill: #827ce8");
+                                lblStatus.setStyle("-fx-text-fill: #6C5CE7; -fx-font-weight: 700; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);");
                                 btnInvite.setVisible(false);
 
                                 if(mapHboxInvite.containsKey(namePlayer)) {
@@ -357,7 +358,7 @@ public class MainFrm {
                             }
                             else {
                                 circleStatus.setStyle("-fx-stroke: rgba(101,104,100,0.76)");
-                                lblStatus.setStyle("-fx-text-fill: rgba(141,147,140,0.77)");
+                                lblStatus.setStyle("-fx-text-fill: #9E9E9E; -fx-font-weight: 700; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 2, 0, 0, 1);");
                                 btnInvite.setVisible(false);
                                 if(mapHboxInvite.containsKey(namePlayer)) {
                                     receivePlayRequest.getChildren().remove(mapHboxInvite.get(namePlayer));

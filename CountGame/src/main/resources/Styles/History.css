@@ -12,6 +12,7 @@
     -fx-font-size: 13px;
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 500;
+    -fx-alignment: center-left;
 }
 
 .lblItemSttHistory{
@@ -41,7 +42,7 @@
     -fx-font-size: 15px;
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
-    -fx-alignment: center;
+    -fx-alignment: center-left;
 }
 
 .title-lable-home{
@@ -115,4 +116,15 @@
         rgba(152, 141, 71, 0.3) 80%,
         rgba(152, 141, 71, 0.1) 100%
     );
+}
+
+/* Tắt thanh cuộn ngang cho ScrollPane */
+.scroll-pane .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+}
+
+.scroll-pane .scroll-bar:horizontal .track,
+.scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-opacity: 0;
 }

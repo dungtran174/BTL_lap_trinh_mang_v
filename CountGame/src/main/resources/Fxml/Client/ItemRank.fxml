@@ -3,14 +3,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox maxHeight="44.0" maxWidth="460.0" minHeight="44.0" minWidth="460.0" prefHeight="44.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="hBox-ItemHistory" stylesheets="@../../Styles/History.css">
+<HBox maxHeight="44.0" maxWidth="476.0" minHeight="44.0" minWidth="476.0" prefHeight="44.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="hBox-ItemHistory" stylesheets="@../../Styles/History.css">
    <children>
       <Label fx:id="lblStt" maxHeight="44.0" minHeight="44.0" minWidth="28.0" prefHeight="44.0" prefWidth="28.0" text="#" styleClass="lblItemSttHistory"/>
-      <Label fx:id="lblPlayers" maxHeight="44.0" maxWidth="170.0" minHeight="44.0" minWidth="170.0" prefHeight="44.0" prefWidth="170.0" text="PLAYERS" styleClass="lblItemUserHistory" />
-      <Label fx:id="lblWins" maxHeight="44.0" maxWidth="48.0" minHeight="44.0" minWidth="48.0" prefHeight="44.0" prefWidth="48.0" text="WINS" styleClass="lblItemHistory"/>
-      <Label fx:id="lblLosses" maxHeight="44.0" maxWidth="56.0" minHeight="44.0" minWidth="56.0" prefHeight="44.0" prefWidth="56.0" text="LOSSES" styleClass="lblItemHistory"/>
-      <Label fx:id="lblDraws" maxHeight="44.0" maxWidth="56.0" minHeight="44.0" minWidth="56.0" prefHeight="44.0" prefWidth="56.0" text="DRAWS" styleClass="lblItemHistory"/>
-      <Label fx:id="lblAFKs" maxHeight="44.0" maxWidth="50.0" minHeight="44.0" minWidth="50.0" prefHeight="44.0" prefWidth="50.0" text="AFKS" styleClass="lblItemHistory"/>
-      <Label fx:id="lplPoints" maxHeight="44.0" maxWidth="50.0" minHeight="44.0" minWidth="50.0" prefHeight="44.0" prefWidth="50.0" text="POINTS" styleClass="lblItemHistory"/>
+      <Label fx:id="lblPlayers" maxHeight="44.0" maxWidth="153.0" minHeight="44.0" minWidth="153.0" prefHeight="44.0" prefWidth="153.0" text="PLAYERS" styleClass="lblItemUserHistory" />
+      <Label fx:id="lblWins" maxHeight="44.0" maxWidth="55.0" minHeight="44.0" minWidth="55.0" prefHeight="44.0" prefWidth="55.0" text="WINS" styleClass="lblItemHistory"/>
+      <Label fx:id="lblLosses" maxHeight="44.0" maxWidth="65.0" minHeight="44.0" minWidth="65.0" prefHeight="44.0" prefWidth="65.0" text="LOSSES" styleClass="lblItemHistory"/>
+      <Label fx:id="lblDraws" maxHeight="44.0" maxWidth="60.0" minHeight="44.0" minWidth="60.0" prefHeight="44.0" prefWidth="60.0" text="DRAWS" styleClass="lblItemHistory"/>
+      <Label fx:id="lblAFKs" maxHeight="44.0" maxWidth="55.0" minHeight="44.0" minWidth="55.0" prefHeight="44.0" prefWidth="55.0" text="AFKS" styleClass="lblItemHistory"/>
+      <Label fx:id="lplPoints" maxHeight="44.0" maxWidth="60.0" minHeight="44.0" minWidth="60.0" prefHeight="44.0" prefWidth="60.0" text="POINTS" styleClass="lblItemHistory"/>
    </children>
 </HBox>

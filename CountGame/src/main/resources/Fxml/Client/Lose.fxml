@@ -19,18 +19,9 @@
             <Image url="@../../Images/iconDefeat.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="98.0" fitWidth="114.0" layoutX="45.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="35.0">
-         <image>
-            <Image url="@../../Images/centilia-cry.gif" />
-         </image></ImageView>
       <ImageView fx:id="flagRankResultLose" fitHeight="443.0" fitWidth="231.0" layoutX="529.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="73.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../../Images/flagChallenger.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="98.0" fitWidth="139.0" layoutX="378.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="105.0" AnchorPane.rightAnchor="286.0465087890625">
-         <image>
-            <Image url="@../../Images/iconbuon.gif" />
          </image>
       </ImageView>
       <Label fx:id="lblPointLose" layoutX="601.0" layoutY="286.0" maxWidth="55.0" minWidth="55.0" prefWidth="55.0" styleClass="point" text="1000">
