@@ -74,6 +74,11 @@
 .choice-box {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.choice-box:hover {
+    -fx-cursor: hand;
 }
 
 /* Style cho mũi tên dropdown */
@@ -90,8 +95,17 @@
 }
 
 /* Style cho từng item trong dropdown menu */
+.choice-box .menu-item {
+    -fx-cursor: hand;
+}
+
 .choice-box .menu-item:focused {
     -fx-background-color: rgba(154, 209, 232, 0.5);
+    -fx-cursor: hand;
+}
+
+.choice-box .menu-item:hover {
+    -fx-cursor: hand;
 }
 
 .choice-box .menu-item > .label {
@@ -99,6 +113,7 @@
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
     -fx-font-size: 24px;
+    -fx-cursor: hand;
 }
 
 .choice-box .menu-item:focused > .label {
@@ -106,6 +121,11 @@
     -fx-font-family: "Be Vietnam Pro";
     -fx-font-weight: 700;
     -fx-font-size: 24px;
+    -fx-cursor: hand;
+}
+
+.choice-box .menu-item:hover > .label {
+    -fx-cursor: hand;
 }
 
 .line-rank {
