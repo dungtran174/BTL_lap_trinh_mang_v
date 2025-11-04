@@ -35,6 +35,8 @@ public class ResultFrm  {
     private Stage stage = mySocket.getStage();
     private boolean waitingForPlayAgainResponse = false;
     private Dialog<ButtonType> currentPlayAgainDialog = null; // Reference to current dialog để đóng khi cần
+    private Stage currentNotificationStage = null; // Reference to current notification để đóng khi cần
+    private boolean hasDeclinedPlayAgain = false; // Flag to track if this client declined
 
     public ResultFrm() {
     }
@@ -57,6 +59,8 @@ public class ResultFrm  {
             switch (data.getPerformative()) {
                 case ObjectWrapper.SERVER_ASK_PLAY_AGAIN:
                     // Server asking if want to play again - show dialog automatically
+                    // Reset declined flag when server asks again
+                    hasDeclinedPlayAgain = false;
                     Platform.runLater(() -> {
                         showPlayAgainDialog();
                     });
@@ -64,7 +68,7 @@ public class ResultFrm  {
                     
                 case ObjectWrapper.SERVER_START_NEW_GAME:
                     // Both players agreed, start new game
-                    // Close dialog and notification if open
+                    // Close dialog and all notifications immediately
                     Platform.runLater(() -> {
                         if (currentPlayAgainDialog != null) {
                             try {
@@ -73,38 +77,44 @@ public class ResultFrm  {
                                 // Ignore
                             }
                             currentPlayAgainDialog = null;
+                        }
+                        if (currentNotificationStage != null) {
+                            try {
+                                currentNotificationStage.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentNotificationStage = null;
                         }
                         waitingForPlayAgainResponse = false;
                     });
                     // The game will start automatically from server when SERVER_SEND_ROUND_DATA is received
                     break;
                     
-                case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
-                    // One player declined - close dialog and show notification
-                    Platform.runLater(() -> {
-                        if (currentPlayAgainDialog != null) {
-                            try {
-                                currentPlayAgainDialog.close();
-                            } catch (Exception e) {
-                                // Ignore
-                            }
-                            currentPlayAgainDialog = null;
-                        }
-                        waitingForPlayAgainResponse = false;
-                        // Show notification that opponent declined
-                        showNotification("Opponent has declined to play again");
-                    });
-                    break;
-                    
                 case ObjectWrapper.SERVER_OPPONENT_WAITING_RESPONSE:
                     // Opponent is waiting for your response - show notification
                     Platform.runLater(() -> {
+                        // Close any existing notification first
+                        if (currentNotificationStage != null) {
+                            try {
+                                currentNotificationStage.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentNotificationStage = null;
+                        }
                         showNotification("Opponent is waiting for your response...");
                         // Dialog remains open so user can still choose
                     });
                     break;
                     
                 case ObjectWrapper.SERVER_OPPONENT_DECLINED_PLAY_AGAIN:
+                    // Opponent declined - only handle if this client hasn't declined
+                    // If this client already declined, ignore this message (don't show notification)
+                    if (hasDeclinedPlayAgain) {
+                        System.out.println("Client: Received SERVER_OPPONENT_DECLINED_PLAY_AGAIN but this client already declined, ignoring");
+                        break;
+                    }
                     // Opponent declined - close dialog immediately and show notification
                     Platform.runLater(() -> {
                         if (currentPlayAgainDialog != null) {
@@ -116,6 +126,15 @@ public class ResultFrm  {
                             currentPlayAgainDialog = null;
                         }
                         waitingForPlayAgainResponse = false;
+                        // Close any existing notification first
+                        if (currentNotificationStage != null) {
+                            try {
+                                currentNotificationStage.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentNotificationStage = null;
+                        }
                         showNotification("Opponent has declined to play again");
                     });
                     break;
@@ -289,10 +308,22 @@ public class ResultFrm  {
                 waitingForPlayAgainResponse = false;
                 if (response == yesButtonType) {
                     // User wants to play again
+                    hasDeclinedPlayAgain = false; // Reset flag
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, true));
                 } else {
-                    // User declined (No hoặc click X) - stay on result screen
+                    // User declined (No hoặc click X) - close dialog immediately and send response
+                    hasDeclinedPlayAgain = true; // Mark that this client declined
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, false));
+                    // Close dialog immediately (already closing from showAndWait, but ensure it's closed)
+                    if (currentPlayAgainDialog != null) {
+                        try {
+                            currentPlayAgainDialog.close();
+                        } catch (Exception e) {
+                            // Ignore
+                        }
+                        currentPlayAgainDialog = null;
+                    }
+                    // No notification for the person who declined - they won't process SERVER_OPPONENT_DECLINED_PLAY_AGAIN
                 }
             });
         });
@@ -303,6 +334,7 @@ public class ResultFrm  {
             try {
                 // Tạo notification popup
                 Stage notificationStage = new Stage();
+                currentNotificationStage = notificationStage; // Lưu reference để đóng sau
                 notificationStage.initStyle(StageStyle.UNDECORATED);
                 notificationStage.initModality(Modality.NONE);
                 notificationStage.initOwner(stage); // Căn giữa theo stage
@@ -321,6 +353,9 @@ public class ResultFrm  {
                 closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 0px 5px;");
                 closeButton.setOnAction(e -> {
                     notificationStage.close();
+                    if (currentNotificationStage == notificationStage) {
+                        currentNotificationStage = null;
+                    }
                 });
                 
                 headerBox.getChildren().addAll(spacer, closeButton);
@@ -374,7 +409,12 @@ public class ResultFrm  {
                 
                 Timeline closeTimer = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
                     fadeOut.play();
-                    fadeOut.setOnFinished(event -> notificationStage.close());
+                    fadeOut.setOnFinished(event -> {
+                        notificationStage.close();
+                        if (currentNotificationStage == notificationStage) {
+                            currentNotificationStage = null;
+                        }
+                    });
                 }));
                 closeTimer.play();
                 

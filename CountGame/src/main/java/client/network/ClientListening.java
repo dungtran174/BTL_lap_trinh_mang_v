@@ -113,7 +113,6 @@ public class ClientListening extends Thread {
                                 break;
                             case ObjectWrapper.SERVER_ASK_PLAY_AGAIN:
                             case ObjectWrapper.SERVER_START_NEW_GAME:
-                            case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
                             case ObjectWrapper.SERVER_OPPONENT_WAITING_RESPONSE:
                             case ObjectWrapper.SERVER_OPPONENT_DECLINED_PLAY_AGAIN:
                                 if (clientCtr.getResultFrm() != null) {

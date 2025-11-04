@@ -59,53 +59,10 @@ public class ObjectWrapper implements Serializable {
     public static final int SERVER_SEND_HISTORY = 42;
     public static final int SERVER_SEND_RANKING = 43;
 
-    // client gửi request sẵn sàng (đã xếp tàu xong), kèm data chính là arraylist string vị trí các tàu
-    public static final int READY_PLAY_GAME = 13;
-    
-    // Đếm thời gian cho xếp tàu trên server nhận ra đã hết, server gửi cho client cái này để cưỡng chế ready (bắt random => ready)
-    public static final int SERVER_REQUEST_READY_GAME = 14;
-
-    // server random chọn 1 trong 2 đi trước sau giai đoạn xếp tàu
-    public static final int SERVER_RANDOM_TURN = 15;
-    public static final int SERVER_RANDOM_NOT_TURN = 16;
-
-    // cả 2 được xác định đã sẵn sàng , server gửi cho cả 2 bắt đầu game
-    public static final int SERVER_START_PLAY_GAME = 19;
-
-    // Gửi toạ độ bắn tàu lên
-    public static final int SHOOT_REQUEST = 20;
-    // server gửi bắn hụt đến cả 2 để vẽ, kèm string location
-    public static final int SERVER_TRANSFER_SHOOT_FAILTURE = 21;
-
-    // server gửi bắn trúng 1 điểm đến cả 2 để vẽ, kèm string location
-    public static final int SERVER_TRANSFER_SHOOT_HIT_POINT = 26;
-
-    // server gửi bắn trúng và phá huỷ 1 con tàu đến cả 2 để vẽ, gửi kèm list string location tàu đó
-    public static final int SERVER_TRANSFER_SHOOT_HIT_SHIP = 28;
-
-    // server gửi bắn trúng và phá huỷ 1 con tàu đến cả 2 để vẽ, gửi kèm list string location tàu đó, kết thúc game
-    public static final int SERVER_TRANSFER_END_GAME = 30;
-    
-    // xác định cả 2 bỏ lượt liên tục 3 lần, game kết thúc hoà
-    public static final int SERVER_TRANSFER_END_GAME_DRAW = 17;
-
-    // server gửi thông tin mất lượt (không bắn khi đến lượt) về cho cả 2
-    public static final int SERVER_TRANSFER_SHOOT_MISS_TURN = 32;
-
     // server gửi kết quả hiển thị cho result form
     public static final int GET_RESULT = 33;
     // Còn đây là client 2 afk khi đang chơi, server trả về cho playfrm
     public static final int SERVER_SEND_RESULT = 34;
-
-    // client 1 được xác định hết thời gian mà không bắn, mất lượt
-    public static final int QUIT_WHEN_SET_SHIP = 35;
-    // server gửi mất lượt về cho client kia
-    public static final int SERVER_TRANSFER_QUIT_WHEN_SET_SHIP = 36;
-
-    // client 1 được xác định hết thời gian mà không bắn, mất lượt
-    public static final int QUIT_WHEN_PLAY = 37;
-    // server gửi mất lượt về cho client kia
-    public static final int SERVER_TRANSFER_QUIT_WHEN_PLAY = 38;
 
     // xem kết quả xong ra trang chủ
     public static final int BACK_TO_MAIN_FORM = 39;
