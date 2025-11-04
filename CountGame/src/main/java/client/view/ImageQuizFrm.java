@@ -293,11 +293,11 @@ public class ImageQuizFrm {
                             String question = (String) roundData[2];
                             System.out.println("ImageQuizFrm: Round " + roundNumber + ", Question: " + question + ", Image bytes: " + (imageBytes != null ? imageBytes.length : "null"));
                             
-                            // Check if result label is currently visible - if so, wait 1 second before showing next round
+                            // Check if result label is currently visible - if so, wait 0.5 seconds before showing next round
                             Label lblResult = (Label) scene.lookup("#lblResult");
                             if (lblResult != null && lblResult.isVisible()) {
-                                // Result is visible, delay 1 second before showing next round
-                                Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                                // Result is visible, delay 0.5 seconds before showing next round
+                                Timeline delayTimeline = new Timeline(new KeyFrame(Duration.millis(500), e -> {
                                     displayRound(roundNumber, imageBytes, question);
                                 }));
                                 delayTimeline.play();
@@ -307,6 +307,22 @@ public class ImageQuizFrm {
                             }
                         } else {
                             System.err.println("ImageQuizFrm: Invalid round data received");
+                        }
+                        break;
+                        
+                    case ObjectWrapper.SERVER_DISABLE_INPUT:
+                        // Disable input immediately when someone submits answer
+                        TextField txtAnswer = (TextField) scene.lookup("#txtAnswer");
+                        Button btnSubmit = (Button) scene.lookup("#btnSubmit");
+                        if (txtAnswer != null) {
+                            txtAnswer.setDisable(true);
+                        }
+                        if (btnSubmit != null) {
+                            btnSubmit.setDisable(true);
+                        }
+                        // Stop countdown
+                        if (countdownTimeline != null) {
+                            countdownTimeline.stop();
                         }
                         break;
                         
@@ -444,15 +460,14 @@ public class ImageQuizFrm {
                     btnSubmit.setVisible(false);
                 }
                 
-                // Show round result in the question area (larger, more visible)
+                // Show correct answer (no "Round X finished!" message)
                 Label lblResult = (Label) scene.lookup("#lblResult");
                 if (lblResult != null) {
-                    String resultText = "Round " + roundNumber + " finished!\n\n";
-                    resultText += "✓ Correct answer: " + correctAnswer + "\n\n";
-                    resultText += "Your score: " + String.format("%.1f", currentMyScore) + "\n";
-                    resultText += "Opponent score: " + String.format("%.1f", currentEnemyScore);
+                    String resultText = "✓ Correct answer: " + correctAnswer;
                     if (gameFinished) {
-                        resultText += "\n\nGame finished!";
+                        resultText += "\n\nGame finished!\n";
+                        resultText += "Your score: " + String.format("%.1f", currentMyScore) + "\n";
+                        resultText += "Opponent score: " + String.format("%.1f", currentEnemyScore);
                     }
                     System.out.println("ImageQuizFrm: Setting result text: " + resultText);
                     lblResult.setText(resultText);

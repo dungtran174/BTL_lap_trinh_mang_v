@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -647,10 +648,10 @@ public class MainFrm {
                 notificationStage.initModality(Modality.NONE);
                 
                 VBox content = new VBox(10);
-                content.setStyle("-fx-background-color: rgba(244, 67, 54, 0.95); -fx-background-radius: 10px; -fx-padding: 15px 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3);");
+                content.setStyle("-fx-background-color: rgba(244, 67, 54, 0.95); -fx-background-radius: 10px; -fx-padding: 15px 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3); -fx-background-insets: 0;");
                 
                 Label messageLabel = new Label(message);
-                messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true;");
+                messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true; -fx-background-color: transparent;");
                 messageLabel.setMaxWidth(300);
                 
                 content.getChildren().add(messageLabel);
@@ -658,6 +659,33 @@ public class MainFrm {
                 javafx.scene.Scene notificationScene = new javafx.scene.Scene(content);
                 notificationScene.setFill(Color.TRANSPARENT);
                 notificationStage.setScene(notificationScene);
+                
+                // Clip VBox để bo góc tròn không bị lộ phần trắng
+                // Phải set clip sau khi scene đã được set để có size chính xác
+                Rectangle clip = new Rectangle();
+                clip.setArcWidth(20);
+                clip.setArcHeight(20);
+                // Bind width và height của clip với content sau khi layout
+                content.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
+                        clip.setWidth(newValue.getWidth());
+                        clip.setHeight(newValue.getHeight());
+                    }
+                });
+                // Set initial size sau khi scene được set
+                Platform.runLater(() -> {
+                    double width = content.getBoundsInLocal().getWidth();
+                    double height = content.getBoundsInLocal().getHeight();
+                    if (width > 0 && height > 0) {
+                        clip.setWidth(width);
+                        clip.setHeight(height);
+                    } else {
+                        // Fallback: sử dụng size từ scene
+                        clip.setWidth(notificationScene.getWidth());
+                        clip.setHeight(notificationScene.getHeight());
+                    }
+                    content.setClip(clip);
+                });
                 
                 // Đặt vị trí ở góc trên bên phải
                 notificationStage.setX(stage.getX() + stage.getWidth() - 350);

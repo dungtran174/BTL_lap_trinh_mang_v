@@ -35,6 +35,7 @@ public class ClientListening extends Thread {
                                 clientCtr.getRegisterFrm().receivedDataProcessing(data);
                                 break;
                             case ObjectWrapper.SERVER_LOGIN_USER:
+                            case ObjectWrapper.LOGIN_ACCOUNT_IN_USE:
                                 clientCtr.getLoginFrm().receivedDataProcessing(data);
                                 break;
                             case ObjectWrapper.SERVER_INFORM_CLIENT_WAITING:
@@ -81,6 +82,11 @@ public class ClientListening extends Thread {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
                                 } else {
                                     System.err.println("Client: ImageQuizFrm is still null after creation attempt");
+                                }
+                                break;
+                            case ObjectWrapper.SERVER_DISABLE_INPUT:
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
                                 }
                                 break;
                             case ObjectWrapper.SERVER_SEND_ROUND_RESULT:

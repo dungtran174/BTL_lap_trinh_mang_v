@@ -89,7 +89,23 @@ public class ServerProcessing extends Thread {
                             }
                         case ObjectWrapper.LOGIN_USER:
                             Player player = (Player) data.getData();
-                            sendData(new ObjectWrapper(ObjectWrapper.SERVER_LOGIN_USER, playerDAO.checkLogin(player)));
+                            // Kiểm tra xem tài khoản đã được sử dụng chưa
+                            boolean accountInUse = false;
+                            for (ServerProcessing sp : serverCtr.getMyProcess()) {
+                                if (sp.isOnline && sp.username != null && sp.username.equals(player.getUsername())) {
+                                    accountInUse = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (accountInUse) {
+                                // Tài khoản đã được sử dụng
+                                sendData(new ObjectWrapper(ObjectWrapper.LOGIN_ACCOUNT_IN_USE, "This account is already in use. Please use another account."));
+                            } else {
+                                // Kiểm tra username/password trong database
+                                String loginResult = playerDAO.checkLogin(player);
+                                sendData(new ObjectWrapper(ObjectWrapper.SERVER_LOGIN_USER, loginResult));
+                            }
                             break;
                         case ObjectWrapper.LOGIN_SUCCESSFUL:
                             String username = (String) data.getData();
@@ -189,10 +205,15 @@ public class ServerProcessing extends Thread {
                                 
                                 imageQuizGameCtr.submitAnswer(this.username, answer);
                                 
-                                // Process immediately if this is the first answer in the round
+                                // Disable input immediately for both players if this is the first answer
                                 if (wasFirstAnswer && !imageQuizGameCtr.isRoundProcessed()) {
                                     System.out.println("Server: First answer received from " + this.username + " in round " + 
-                                                     imageQuizGameCtr.getCurrentRoundNumber() + ", processing round immediately");
+                                                     imageQuizGameCtr.getCurrentRoundNumber() + ", disabling input for both players");
+                                    // Send disable input signal to both players immediately
+                                    sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISABLE_INPUT));
+                                    enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISABLE_INPUT));
+                                    
+                                    // Process round immediately after disabling input
                                     processImageQuizRound();
                                 }
                             }
@@ -315,17 +336,35 @@ public class ServerProcessing extends Thread {
                 }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
-//            serverCtr.removeServerProcessing(this);
-//            try {
-//                mySocket.close();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//            this.stop();
+            // Client disconnected or error occurred
+            System.out.println("Server: Client disconnected or error: " + (username != null ? username : "unknown"));
+            // Set offline status
+            isOnline = false;
+            // Update waiting list
+            if (serverCtr != null) {
+                serverCtr.sendWaitingList();
+            }
+            // Remove from server processing list
+            if (serverCtr != null) {
+                serverCtr.removeServerProcessing(this);
+            }
+            try {
+                if (mySocket != null && !mySocket.isClosed()) {
+                    mySocket.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            isRunning = false;
         } finally {
+            // Set offline status when client disconnects
+            isOnline = false;
+            // Update waiting list
+            if (serverCtr != null) {
+                serverCtr.sendWaitingList();
+            }
             serverCtr.removeServerProcessing(this);
-            if (inGame) {
+            if (inGame && enemy != null) {
                 enemy.inGame = false;
                 enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISCONNECTED_CLIENT_ERROR));
                 enemy.enemy = null;
@@ -454,9 +493,13 @@ public class ServerProcessing extends Thread {
                 
                 if (remaining <= 0) {
                     stopAllTimers();
-                    // Round time is up, process the round if not already processed
+                    // Round time is up, disable input and process the round if not already processed
                     if (imageQuizGameCtr != null && enemy != null && !imageQuizGameCtr.isRoundProcessed()) {
-                        System.out.println("Server: Round time expired, processing round");
+                        System.out.println("Server: Round time expired, disabling input and processing round");
+                        // Disable input for both players when time expires
+                        sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISABLE_INPUT));
+                        enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISABLE_INPUT));
+                        // Process round after disabling input
                         processImageQuizRound();
                     }
                 }
@@ -585,16 +628,16 @@ public class ServerProcessing extends Thread {
                             System.out.println("Server: Asking both players if they want to play again");
                         }
                     }
-                }, 2000); // Wait 2 seconds after game ends before asking
+                }, 500); // Wait 2 seconds after game ends before asking
             } else {
-                // Move to next round after a delay (3 seconds to allow result display)
+                // Move to next round after a delay (0.5 seconds to show answer)
                 Timer delayTimer = new Timer();
                 delayTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         startImageQuizRound();
                     }
-                }, 3000); // 3 seconds: 1 second for result display + 2 seconds buffer
+                }, 500); // 0.5 seconds to show correct answer
             }
         }
     }

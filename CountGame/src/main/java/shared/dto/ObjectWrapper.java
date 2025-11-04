@@ -8,6 +8,8 @@ public class ObjectWrapper implements Serializable {
 
     // server respone request login
     public static final int SERVER_LOGIN_USER = 2;
+    // server gửi thông báo tài khoản đã được sử dụng
+    public static final int LOGIN_ACCOUNT_IN_USE = 74;
 
     // client gửi request get all user
     public static final int GET_ALL_USER = 18;
@@ -121,6 +123,8 @@ public class ObjectWrapper implements Serializable {
     public static final int SUBMIT_ANSWER = 62;
     // server gửi kết quả round (đúng/sai, điểm hiện tại)
     public static final int SERVER_SEND_ROUND_RESULT = 63;
+    // server gửi thông báo vô hiệu hóa input khi có người gửi đáp án
+    public static final int SERVER_DISABLE_INPUT = 73;
     // server gửi thông báo hết thời gian round
     public static final int SERVER_ROUND_TIME_OUT = 64;
     // server gửi kết thúc game (tổng điểm, người thắng)

@@ -109,13 +109,22 @@ public class LoginFrm extends Application {
 
     public void receivedDataProcessing(ObjectWrapper data) {
         Platform.runLater(() -> {
-
-            String result = (String) data.getData();
             Scene loginScreen = mySocket.getLoginScreen();
+            Label msg = (Label) loginScreen.lookup("#msg");
+            ImageView imgErr = (ImageView) loginScreen.lookup("#iconErr");
+            
+            if (data.getPerformative() == ObjectWrapper.LOGIN_ACCOUNT_IN_USE) {
+                // Tài khoản đã được sử dụng
+                String message = (String) data.getData();
+                msg.setVisible(true);
+                imgErr.setVisible(true);
+                msg.setWrapText(true);
+                msg.setText("Error: " + message);
+                return;
+            }
+            
+            String result = (String) data.getData();
             if (result.equals("false")) {
-                Scene scene = mySocket.getLoginScreen();
-                Label msg = (Label) scene.lookup("#msg");
-                ImageView imgErr = (ImageView) scene.lookup("#iconErr");
                 msg.setVisible(true);
                 imgErr.setVisible(true);
                 msg.setWrapText(true);
