@@ -11,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,7 +28,6 @@ public class ResultFrm  {
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
     private boolean waitingForPlayAgainResponse = false;
-    private Dialog<ButtonType> playAgainDialog = null; // Reference to dialog để đóng khi một người chọn NO
 
     public ResultFrm() {
     }
@@ -58,17 +61,8 @@ public class ResultFrm  {
                     break;
                     
                 case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
-                    // One player declined - close dialog and stay on result screen
+                    // One player declined - stay on result screen
                     Platform.runLater(() -> {
-                        // Close dialog if it's open
-                        if (playAgainDialog != null) {
-                            try {
-                                playAgainDialog.close();
-                            } catch (Exception e) {
-                                // Dialog might already be closed
-                            }
-                            playAgainDialog = null;
-                        }
                         waitingForPlayAgainResponse = false;
                         // Stay on result screen, no notification needed
                     });
@@ -124,15 +118,18 @@ public class ResultFrm  {
                             //set point and flag
                             ImageView flagWin = (ImageView) win.getNamespace().get("flagRankResultWin");
                             Label lblPointWin = (Label) win.getNamespace().get("lblPointWin");
+                            Label lblPointChange = (Label) win.getNamespace().get("lblPointChange");
                             int point = mySocket.getPoints();
 
-
+                            // Kiểm tra nếu đây là trường hợp đối thủ rời trận (vẫn cộng 1 điểm)
                             if(result.equals("win")) {
+                                // Thắng (bình thường hoặc do đối thủ rời trận): cộng 1 điểm
                                 point = point + 1;
                                 mySocket.setPoints(point);
+                                lblPointChange.setText("+1 POINT");
                             }
                             else {
-                                Label lblPointChange = (Label) win.getNamespace().get("lblPointChange");
+                                // Không thắng: không cộng điểm
                                 lblPointChange.setText("+0 POINT");
                             }
                             lblPointWin.setText(String.valueOf(point));
@@ -172,26 +169,40 @@ public class ResultFrm  {
         waitingForPlayAgainResponse = true;
         
         Platform.runLater(() -> {
-            // Close existing dialog if any
-            if (playAgainDialog != null) {
-                try {
-                    playAgainDialog.close();
-                } catch (Exception e) {
-                    // Ignore
-                }
-                playAgainDialog = null;
-            }
-            
             // Create custom dialog
-            playAgainDialog = new Dialog<>();
-            playAgainDialog.initOwner(stage);
+            Dialog<ButtonType> playAgainDialog = new Dialog<>();
+            playAgainDialog.initOwner(stage); // Căn giữa theo stage
             playAgainDialog.initModality(Modality.APPLICATION_MODAL);
             playAgainDialog.initStyle(StageStyle.TRANSPARENT);
             playAgainDialog.setTitle("Play Again");
             
+            // Tạo container với nút X
+            StackPane container = new StackPane();
+            container.setStyle("-fx-background-color: transparent;");
+            
             // Content
             VBox content = new VBox(15);
             content.setStyle("-fx-background-color: white; -fx-background-radius: 20px; -fx-padding: 30px; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);");
+            
+            // Tạo HBox chứa nút X ở góc trên bên phải
+            HBox headerBox = new HBox();
+            headerBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            // Buttons trước để có thể dùng trong closeButton
+            ButtonType yesButtonType = new ButtonType("Yes", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+            ButtonType noButtonType = new ButtonType("No", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+            
+            // Nút X để đóng dialog (coi như No)
+            Button closeButton = new Button("✕");
+            closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-size: 20px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 5px 10px;");
+            closeButton.setOnAction(e -> {
+                playAgainDialog.setResult(noButtonType);
+                playAgainDialog.close();
+            });
+            
+            headerBox.getChildren().addAll(spacer, closeButton);
             
             Label titleLabel = new Label("Play Again?");
             titleLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #4CAF50; -fx-font-family: 'Be Vietnam Pro';");
@@ -200,14 +211,16 @@ public class ResultFrm  {
             messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'Be Vietnam Pro';");
             messageLabel.setMaxWidth(400);
             
-            content.getChildren().addAll(titleLabel, messageLabel);
+            VBox contentBox = new VBox(10);
+            contentBox.setAlignment(javafx.geometry.Pos.CENTER);
+            contentBox.getChildren().addAll(headerBox, titleLabel, messageLabel);
             
-            playAgainDialog.getDialogPane().setContent(content);
+            content.getChildren().add(contentBox);
+            container.getChildren().add(content);
+            
+            playAgainDialog.getDialogPane().setContent(container);
             playAgainDialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
             
-            // Buttons
-            ButtonType yesButtonType = new ButtonType("Yes", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
-            ButtonType noButtonType = new ButtonType("No", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
             playAgainDialog.getDialogPane().getButtonTypes().addAll(yesButtonType, noButtonType);
             
             // Style buttons
@@ -224,11 +237,9 @@ public class ResultFrm  {
                     // User wants to play again
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, true));
                 } else {
-                    // User declined - stay on result screen, don't go back to main
+                    // User declined (No hoặc click X) - stay on result screen
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, false));
-                    // Note: Dialog is already closed by showAndWait(), user stays on result screen
                 }
-                playAgainDialog = null;
             });
         });
     }

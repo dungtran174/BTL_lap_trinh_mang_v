@@ -132,8 +132,10 @@ public class ObjectWrapper implements Serializable {
     
     // client gửi request rời trận giữa chừng
     public static final int CLIENT_LEAVE_GAME = 66;
-    // server gửi thông báo người chơi đã rời trận và quay về màn hình chính
+    // server gửi thông báo người chơi đã rời trận và quay về màn hình chính (cho người rời trận)
     public static final int SERVER_PLAYER_LEFT_GAME = 67;
+    // server gửi thông báo đối thủ đã rời trận và chuyển về Result screen (cho người còn lại)
+    public static final int SERVER_OPPONENT_LEFT_SHOW_RESULT = 75;
     
     // Play Again - Rematch
     // client gửi response về việc muốn chơi lại hay không (YES/NO)

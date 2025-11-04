@@ -14,6 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -66,12 +70,37 @@ public class ImageQuizFrm {
             // Tạo custom dialog đẹp hơn với bo góc
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Xác nhận rời trận");
+            dialog.initOwner(stage); // Căn giữa theo stage
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initStyle(StageStyle.TRANSPARENT);
+            
+            // Tạo container với nút X
+            StackPane container = new StackPane();
+            container.setStyle("-fx-background-color: transparent;");
             
             // Tạo nội dung dialog với bo góc đẹp
             VBox content = new VBox(20);
             content.setStyle("-fx-padding: 30px; -fx-alignment: center; -fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);");
+            
+            // Tạo HBox chứa nút X ở góc trên bên phải
+            HBox headerBox = new HBox();
+            headerBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            // Tạo buttons trước để có thể dùng trong closeButton
+            ButtonType confirmButtonType = new ButtonType("Confirm", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+            ButtonType cancelButtonType = new ButtonType("Cancel", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+            
+            // Nút X để đóng dialog (coi như Cancel)
+            Button closeButton = new Button("✕");
+            closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-size: 20px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 5px 10px;");
+            closeButton.setOnAction(e -> {
+                dialog.setResult(cancelButtonType);
+                dialog.close();
+            });
+            
+            headerBox.getChildren().addAll(spacer, closeButton);
             
             // Sử dụng ảnh err.png làm icon
             ImageView iconView = new ImageView();
@@ -81,13 +110,9 @@ public class ImageQuizFrm {
                 iconView.setFitHeight(60);
                 iconView.setFitWidth(60);
                 iconView.setPreserveRatio(true);
-                content.getChildren().add(iconView);
             } catch (Exception e) {
                 // Fallback nếu không load được ảnh
                 e.printStackTrace();
-                Label iconLabel = new Label("⚠️");
-                iconLabel.setStyle("-fx-font-size: 48px; -fx-padding: 10px;");
-                content.getChildren().add(iconLabel);
             }
             
             Label titleLabel = new Label("Leave Game");
@@ -97,14 +122,16 @@ public class ImageQuizFrm {
             messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'Be Vietnam Pro';");
             messageLabel.setMaxWidth(400);
             
-            content.getChildren().addAll(titleLabel, messageLabel);
+            VBox contentBox = new VBox(10);
+            contentBox.setAlignment(javafx.geometry.Pos.CENTER);
+            contentBox.getChildren().addAll(headerBox, iconView, titleLabel, messageLabel);
             
-            dialog.getDialogPane().setContent(content);
+            content.getChildren().add(contentBox);
+            container.getChildren().add(content);
+            
+            dialog.getDialogPane().setContent(container);
             dialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
             
-            // Tạo buttons
-            ButtonType confirmButtonType = new ButtonType("Confirm", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
-            ButtonType cancelButtonType = new ButtonType("Cancel", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
             dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, cancelButtonType);
             
             // Style cho buttons với bo góc
@@ -120,16 +147,14 @@ public class ImageQuizFrm {
                     // Send leave game request to server
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_LEAVE_GAME, null));
                     
-                    // Quay về màn hình home ngay lập tức (không cần đợi server response)
-                    // Server sẽ gửi SERVER_PLAYER_LEFT_GAME sau, nhưng để UX tốt hơn, quay về ngay
+                    // Quay về màn hình home ngay lập tức
                     if (countdownTimeline != null) {
                         countdownTimeline.stop();
                     }
-                    // Không cần hiển thị thông báo ở đây vì server sẽ gửi SERVER_PLAYER_LEFT_GAME
-                    // và ImageQuizFrm sẽ xử lý thông báo khi nhận được
                     MainFrm mainFrm = new MainFrm();
                     mainFrm.openScene();
                 }
+                // Nếu response là cancelButtonType (khi click X hoặc Cancel), không làm gì cả
             });
         });
     }
@@ -205,33 +230,40 @@ public class ImageQuizFrm {
         }
         
         Label lblTimer = (Label) mySocket.getImageQuizScene().lookup("#lblTimer");
-        if (lblTimer != null) {
-            lblTimer.setText(String.valueOf(seconds));
+        if (lblTimer == null) {
+            return;
         }
         
-        final int[] timeRemaining = {seconds};
-        countdownTimeline = new Timeline();
-        countdownTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
-            timeRemaining[0]--;
-            if (lblTimer != null) {
-                lblTimer.setText(String.valueOf(timeRemaining[0]));
-            }
-            
-            if (timeRemaining[0] <= 0) {
-                countdownTimeline.stop();
-                // Time is up, disable input
-                TextField txtAnswer = (TextField) mySocket.getImageQuizScene().lookup("#txtAnswer");
-                Button btnSubmit = (Button) mySocket.getImageQuizScene().lookup("#btnSubmit");
-                if (txtAnswer != null) {
-                    txtAnswer.setDisable(true);
-                }
-                if (btnSubmit != null) {
-                    btnSubmit.setDisable(true);
-                }
-            }
-        }));
+        // Hiển thị giá trị ban đầu
+        lblTimer.setText(String.valueOf(seconds));
         
-        countdownTimeline.setCycleCount(seconds);
+        countdownTimeline = new Timeline();
+        
+        // Tạo KeyFrame cho mỗi giây: 0, 1, 2, ..., seconds
+        for (int i = 0; i <= seconds; i++) {
+            final int displayValue = seconds - i;
+            countdownTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
+                if (lblTimer != null) {
+                    lblTimer.setText(String.valueOf(displayValue));
+                }
+                
+                // Khi đếm đến 0, disable input
+                if (displayValue == 0) {
+                    countdownTimeline.stop();
+                    // Time is up, disable input
+                    TextField txtAnswer = (TextField) mySocket.getImageQuizScene().lookup("#txtAnswer");
+                    Button btnSubmit = (Button) mySocket.getImageQuizScene().lookup("#btnSubmit");
+                    if (txtAnswer != null) {
+                        txtAnswer.setDisable(true);
+                    }
+                    if (btnSubmit != null) {
+                        btnSubmit.setDisable(true);
+                    }
+                }
+            }));
+        }
+        
+        countdownTimeline.setCycleCount(1); // Chỉ chạy 1 lần
         countdownTimeline.play();
     }
     
@@ -353,34 +385,48 @@ public class ImageQuizFrm {
                             myResult = "draw";
                         }
                         
-                        // Go to result screen
-                        ResultFrm resultFrm = new ResultFrm();
-                        mySocket.setResultFrm(resultFrm);
-                        resultFrm.openScene();
+                        // Delay 0.5 giây để người chơi có thời gian xem đáp án ở round cuối
+                        // trước khi chuyển sang result screen
+                        Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(0.5), e -> {
+                            // Go to result screen
+                            ResultFrm resultFrm = new ResultFrm();
+                            mySocket.setResultFrm(resultFrm);
+                            resultFrm.openScene();
+                        }));
+                        delayTimeline.setCycleCount(1);
+                        delayTimeline.play();
                         break;
                         
                     case ObjectWrapper.SERVER_PLAYER_LEFT_GAME:
-                        // Player left game, return to main screen
+                        // Người rời trận: return to main screen (không có thông báo)
+                        if (countdownTimeline != null) {
+                            countdownTimeline.stop();
+                        }
+                        // Clear ImageQuizFrm reference để có thể tạo mới khi chơi ván sau
+                        mySocket.setImageQuizFrm(null);
+                        mySocket.setImageQuizScene(null);
+                        MainFrm mainFrm = new MainFrm();
+                        mainFrm.openScene();
+                        break;
+                        
+                    case ObjectWrapper.SERVER_OPPONENT_LEFT_SHOW_RESULT:
+                        // Đối thủ rời trận: hiển thị dialog và chuyển về Result
                         if (countdownTimeline != null) {
                             countdownTimeline.stop();
                         }
                         
-                        // Get username of player who left
-                        String leftPlayerUsername = (String) data.getData();
-                        String myUsername = mySocket.getUsername();
+                        // Clear ImageQuizFrm reference để có thể tạo mới khi chơi ván sau
+                        mySocket.setImageQuizFrm(null);
+                        mySocket.setImageQuizScene(null);
                         
-                        // Go back to main screen
-                        MainFrm mainFrm = new MainFrm();
+                        // Get result data: "win||" + username của người rời trận
+                        String opponentLeftData = (String) data.getData();
+                        String[] resultAndLeftUsername = opponentLeftData.split("\\|\\|");
+                        String result = resultAndLeftUsername[0]; // "win"
+                        String leftPlayerUsername = resultAndLeftUsername[1];
                         
-                        // Chỉ hiển thị thông báo nếu đây không phải là người rời trận
-                        // (người rời trận đã quay về home từ handleLeaveGame)
-                        if (!myUsername.equals(leftPlayerUsername)) {
-                            // Người còn lại: hiển thị thông báo
-                            mainFrm.openSceneWithNotification(leftPlayerUsername);
-                        } else {
-                            // Người rời trận: chỉ quay về home, không có thông báo
-                            mainFrm.openScene();
-                        }
+                        // Hiển thị dialog thông báo
+                        showOpponentLeftDialog(leftPlayerUsername, result);
                         break;
                 }
             } catch (Exception e) {
@@ -481,6 +527,68 @@ public class ImageQuizFrm {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+    }
+    
+    private void showOpponentLeftDialog(String leftPlayerUsername, String result) {
+        Platform.runLater(() -> {
+            // Tạo custom dialog thông báo
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Kết thúc trận đấu");
+            dialog.initOwner(stage); // Căn giữa theo stage
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initStyle(StageStyle.TRANSPARENT);
+            
+            // Tạo container với nút X
+            StackPane container = new StackPane();
+            container.setStyle("-fx-background-color: transparent;");
+            
+            // Tạo nội dung dialog
+            VBox content = new VBox(20);
+            content.setStyle("-fx-padding: 30px; -fx-alignment: center; -fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);");
+            
+            // Tạo HBox chứa nút X ở góc trên bên phải
+            HBox headerBox = new HBox();
+            headerBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            // Nút X để đóng dialog (coi như CANCEL - không chuyển về Result screen)
+            Button closeButton = new Button("✕");
+            closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-size: 20px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 5px 10px;");
+            closeButton.setOnAction(e -> {
+                dialog.setResult(ButtonType.CANCEL);
+                dialog.close();
+            });
+            
+            headerBox.getChildren().addAll(spacer, closeButton);
+            
+            Label messageLabel = new Label("Đối thủ đã rời đi, nhấn OK để xem kết quả");
+            messageLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #333; -fx-wrap-text: true; -fx-text-alignment: center; -fx-font-family: 'Be Vietnam Pro';");
+            messageLabel.setMaxWidth(400);
+            
+            VBox contentBox = new VBox(10);
+            contentBox.setAlignment(javafx.geometry.Pos.CENTER);
+            contentBox.getChildren().addAll(headerBox, messageLabel);
+            
+            content.getChildren().add(contentBox);
+            container.getChildren().add(content);
+            
+            dialog.getDialogPane().setContent(container);
+            dialog.getDialogPane().setStyle("-fx-background-color: transparent; -fx-background-radius: 20px;");
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+            
+            // Xử lý khi nhấn OK hoặc X
+            dialog.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // Chuyển về Result screen với kết quả
+                    ResultFrm resultFrm = new ResultFrm();
+                    mySocket.setResultFrm(resultFrm);
+                    ObjectWrapper resultData = new ObjectWrapper(ObjectWrapper.SERVER_SEND_RESULT, result + "||" + leftPlayerUsername + "||opponent_left");
+                    resultFrm.receivedDataProcessing(resultData);
+                }
+                // Nếu response là CANCEL (khi click X), không làm gì cả
+            });
         });
     }
     

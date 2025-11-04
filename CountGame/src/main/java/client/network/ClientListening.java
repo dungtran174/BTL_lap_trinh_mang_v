@@ -63,9 +63,19 @@ public class ClientListening extends Thread {
                                 break;
                             case ObjectWrapper.SERVER_SEND_ROUND_DATA:
                                 System.out.println("Client: Received SERVER_SEND_ROUND_DATA");
-                                // Always create new ImageQuizFrm if null or if we're on result screen (play again scenario)
-                                if (clientCtr.getImageQuizFrm() == null || clientCtr.getResultFrm() != null) {
+                                // Always create new ImageQuizFrm if:
+                                // 1. It's null, OR
+                                // 2. We're on result screen (play again scenario), OR
+                                // 3. We're on waiting screen (new game after someone left)
+                                if (clientCtr.getImageQuizFrm() == null || 
+                                    clientCtr.getResultFrm() != null || 
+                                    clientCtr.getWaitingFrm() != null) {
                                     System.out.println("Client: Creating new ImageQuizFrm for round data");
+                                    // Clear old references if they exist
+                                    if (clientCtr.getImageQuizFrm() != null) {
+                                        clientCtr.setImageQuizFrm(null);
+                                        clientCtr.setImageQuizScene(null);
+                                    }
                                     ImageQuizFrm imageQuizFrm = new ImageQuizFrm();
                                     clientCtr.setImageQuizFrm(imageQuizFrm);
                                     imageQuizFrm.openScene();
@@ -75,8 +85,10 @@ public class ClientListening extends Thread {
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-                                    // Clear result form reference since we're entering game
+                                    // Clear result form and waiting form references since we're entering game
                                     clientCtr.setResultFrm(null);
+                                    clientCtr.setWaitingFrm(null);
+                                    clientCtr.setWaitingScene(null);
                                 }
                                 if (clientCtr.getImageQuizFrm() != null) {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
@@ -107,6 +119,12 @@ public class ClientListening extends Thread {
                                 }
                                 break;
                             case ObjectWrapper.SERVER_PLAYER_LEFT_GAME:
+                                if (clientCtr.getImageQuizFrm() != null) {
+                                    clientCtr.getImageQuizFrm().receivedDataProcessing(data);
+                                }
+                                break;
+                            case ObjectWrapper.SERVER_OPPONENT_LEFT_SHOW_RESULT:
+                                // Đối thủ rời trận, hiển thị dialog và chuyển về Result
                                 if (clientCtr.getImageQuizFrm() != null) {
                                     clientCtr.getImageQuizFrm().receivedDataProcessing(data);
                                 }

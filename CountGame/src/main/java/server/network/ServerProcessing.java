@@ -46,6 +46,7 @@ public class ServerProcessing extends Thread {
     
     // Play Again variables
     private Boolean playAgainResponse = null; // null = not answered, true = yes, false = no
+    private volatile boolean playAgainProcessing = false; // Flag to prevent multiple calls to handlePlayAgainDecision
 
     private PlayerDAO playerDAO = new PlayerDAO();
     private MatchDAO matchDAO = new MatchDAO();
@@ -227,11 +228,27 @@ public class ServerProcessing extends Thread {
                                                  ", enemy=" + enemy.username + ", enemy.isInviter=" + enemy.isInviter);
                                 
                                 // Check if both players have responded
-                                // Call handlePlayAgainDecision() - it has synchronized blocks to prevent race conditions
-                                // Only the inviter (or fallback logic) will actually create the game controller
                                 if (this.playAgainResponse != null && enemy.playAgainResponse != null) {
-                                    System.out.println("Server: Both players responded, calling handlePlayAgainDecision() from " + this.username);
-                                    handlePlayAgainDecision();
+                                    System.out.println("Server: Both players responded - " + this.username + " is the last responder");
+                                    // The thread that receives the last response (making both responses available) should call handlePlayAgainDecision()
+                                    // Use synchronized to ensure only one thread processes it
+                                    // Prefer inviter, but if inviter already processed or this is non-inviter's thread, handle it here
+                                    synchronized (this) {
+                                        synchronized (enemy) {
+                                            // Check if already being processed
+                                            if (!this.playAgainProcessing && !enemy.playAgainProcessing) {
+                                                System.out.println("Server: " + this.username + " (last responder) calling handlePlayAgainDecision()");
+                                                handlePlayAgainDecision();
+                                            } else {
+                                                System.out.println("Server: Play again decision already being processed, skipping");
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    System.out.println("Server: Waiting for other player's response. " + 
+                                                     this.username + ": " + this.playAgainResponse + 
+                                                     ", " + (enemy != null ? enemy.username : "null") + ": " + 
+                                                     (enemy != null ? enemy.playAgainResponse : "null"));
                                 }
                             }
                             break;
@@ -248,13 +265,13 @@ public class ServerProcessing extends Thread {
                                 // Update AFK for the player who left (trừ 1 điểm)
                                 playerDAO.updateAfk(this.username);
                                 
-                                // Update win for the opponent (cộng 1 điểm)
+                                // Cộng điểm cho người còn lại (thắng do đối thủ rời trận)
                                 playerDAO.updateWin(enemy.username);
                                 
                                 // Update loss for the player who left
                                 playerDAO.updateLoss(this.username);
                                 
-                                // Create match record
+                                // Create match record - người còn lại cộng 1 điểm
                                 Match match = new Match(enemy.username, this.username, "win", "afk", 1, -1);
                                 matchDAO.updateMatchResult(match);
                                 
@@ -264,12 +281,14 @@ public class ServerProcessing extends Thread {
                                 
                                 // Set results
                                 this.result = "afk";
-                                enemy.result = "win";
+                                enemy.result = "win"; // Người còn lại thắng nhưng không cộng điểm
                                 
-                                // Send notification to both players to return to main screen
-                                // Send username of player who left in the data
+                                // Người rời trận: về home
                                 sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAYER_LEFT_GAME, this.username));
-                                enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAYER_LEFT_GAME, this.username));
+                                
+                                // Người còn lại: chuyển về Result screen với kết quả
+                                // Gửi result data: "win||" + username của người rời trận
+                                enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_OPPONENT_LEFT_SHOW_RESULT, "win||" + this.username));
                                 
                                 // Reset in-game status
                                 inGame = false;
@@ -278,7 +297,7 @@ public class ServerProcessing extends Thread {
                                 // Update waiting list
                                 serverCtr.sendWaitingList();
                                 
-                                System.out.println("Server: " + this.username + " left the game, " + enemy.username + " wins");
+                                System.out.println("Server: " + this.username + " left the game, " + enemy.username + " wins (+1 point)");
                             }
                             break;
                         case ObjectWrapper.EXIT_MAIN_FORM:
@@ -628,7 +647,7 @@ public class ServerProcessing extends Thread {
                             System.out.println("Server: Asking both players if they want to play again");
                         }
                     }
-                }, 500); // Wait 2 seconds after game ends before asking
+                }, 1000); // Wait 2 seconds after game ends before asking
             } else {
                 // Move to next round after a delay (0.5 seconds to show answer)
                 Timer delayTimer = new Timer();
@@ -648,8 +667,19 @@ public class ServerProcessing extends Thread {
             return;
         }
         
+        // Prevent multiple calls - use synchronized check on both objects
         synchronized (this) {
             synchronized (enemy) {
+                // Check if already processing
+                if (this.playAgainProcessing || enemy.playAgainProcessing) {
+                    System.out.println("Server: handlePlayAgainDecision() already being processed, skipping duplicate call");
+                    return;
+                }
+                
+                // Set processing flag
+                this.playAgainProcessing = true;
+                enemy.playAgainProcessing = true;
+                
                 System.out.println("Server: handlePlayAgainDecision() - " + username + ": isInviter=" + isInviter + 
                                  ", playAgainResponse=" + playAgainResponse + 
                                  ", enemy=" + enemy.username + 
@@ -745,6 +775,10 @@ public class ServerProcessing extends Thread {
                     sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED));
                     enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED));
                 }
+                
+                // Reset processing flag
+                this.playAgainProcessing = false;
+                enemy.playAgainProcessing = false;
             }
         }
     }

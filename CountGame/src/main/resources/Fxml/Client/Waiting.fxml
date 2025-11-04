@@ -22,7 +22,7 @@
          </font>
       </Label>
       
-      <Button fx:id="btnStart" layoutX="336.0" layoutY="350.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start" visible="false" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
+      <Button fx:id="btnStart" layoutX="311.5" layoutY="350.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" text="Start" visible="false" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2); -fx-cursor: hand;" styleClass="game-button">
          <font>
             <Font name="Be Vietnam Pro" size="20.0" />
          </font>

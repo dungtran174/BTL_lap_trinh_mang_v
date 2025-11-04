@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -550,6 +552,9 @@ public class MainFrm {
 
                 case ObjectWrapper.SERVER_SET_GAME_READY:
                     boolean isInviter = (Boolean) data.getData();
+                    // Clear ImageQuizFrm reference nếu còn tồn tại từ ván trước
+                    mySocket.setImageQuizFrm(null);
+                    mySocket.setImageQuizScene(null);
                     if (mySocket.getWaitingFrm() == null) {
                         WaitingFrm waitingFrm = new WaitingFrm(isInviter);
                         mySocket.setWaitingFrm(waitingFrm);
@@ -650,11 +655,29 @@ public class MainFrm {
                 VBox content = new VBox(10);
                 content.setStyle("-fx-background-color: rgba(244, 67, 54, 0.95); -fx-background-radius: 10px; -fx-padding: 15px 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3); -fx-background-insets: 0;");
                 
+                // Tạo HBox chứa nút X ở góc trên bên phải
+                HBox headerBox = new HBox();
+                headerBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                
+                // Nút X để đóng notification
+                Button closeButton = new Button("✕");
+                closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 0px 5px;");
+                closeButton.setOnAction(e -> {
+                    notificationStage.close();
+                });
+                
+                headerBox.getChildren().addAll(spacer, closeButton);
+                
                 Label messageLabel = new Label(message);
                 messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true; -fx-background-color: transparent;");
                 messageLabel.setMaxWidth(300);
                 
-                content.getChildren().add(messageLabel);
+                VBox contentBox = new VBox(5);
+                contentBox.getChildren().addAll(headerBox, messageLabel);
+                
+                content.getChildren().add(contentBox);
                 
                 javafx.scene.Scene notificationScene = new javafx.scene.Scene(content);
                 notificationScene.setFill(Color.TRANSPARENT);
