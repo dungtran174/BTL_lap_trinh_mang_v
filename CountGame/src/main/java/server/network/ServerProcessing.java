@@ -227,6 +227,19 @@ public class ServerProcessing extends Thread {
                                 System.out.println("Server: " + this.username + " - isInviter=" + isInviter + 
                                                  ", enemy=" + enemy.username + ", enemy.isInviter=" + enemy.isInviter);
                                 
+                                // Notify opponent based on response
+                                if (wantsPlayAgain) {
+                                    // Player chose YES - notify opponent if they haven't responded yet
+                                    if (enemy.playAgainResponse == null) {
+                                        System.out.println("Server: " + this.username + " chose YES, notifying " + enemy.username + " that opponent is waiting");
+                                        enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_OPPONENT_WAITING_RESPONSE));
+                                    }
+                                } else {
+                                    // Player chose NO - notify opponent immediately and close their dialog
+                                    System.out.println("Server: " + this.username + " chose NO, notifying " + enemy.username + " that opponent declined");
+                                    enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_OPPONENT_DECLINED_PLAY_AGAIN));
+                                }
+                                
                                 // Check if both players have responded
                                 if (this.playAgainResponse != null && enemy.playAgainResponse != null) {
                                     System.out.println("Server: Both players responded - " + this.username + " is the last responder");

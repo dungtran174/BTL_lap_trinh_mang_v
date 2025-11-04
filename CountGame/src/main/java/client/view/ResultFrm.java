@@ -15,6 +15,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -28,6 +34,7 @@ public class ResultFrm  {
     private ClientCtr mySocket = ClientCtr.getInstance();
     private Stage stage = mySocket.getStage();
     private boolean waitingForPlayAgainResponse = false;
+    private Dialog<ButtonType> currentPlayAgainDialog = null; // Reference to current dialog để đóng khi cần
 
     public ResultFrm() {
     }
@@ -57,14 +64,59 @@ public class ResultFrm  {
                     
                 case ObjectWrapper.SERVER_START_NEW_GAME:
                     // Both players agreed, start new game
+                    // Close dialog and notification if open
+                    Platform.runLater(() -> {
+                        if (currentPlayAgainDialog != null) {
+                            try {
+                                currentPlayAgainDialog.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentPlayAgainDialog = null;
+                        }
+                        waitingForPlayAgainResponse = false;
+                    });
                     // The game will start automatically from server when SERVER_SEND_ROUND_DATA is received
                     break;
                     
                 case ObjectWrapper.SERVER_PLAY_AGAIN_DECLINED:
-                    // One player declined - stay on result screen
+                    // One player declined - close dialog and show notification
                     Platform.runLater(() -> {
+                        if (currentPlayAgainDialog != null) {
+                            try {
+                                currentPlayAgainDialog.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentPlayAgainDialog = null;
+                        }
                         waitingForPlayAgainResponse = false;
-                        // Stay on result screen, no notification needed
+                        // Show notification that opponent declined
+                        showNotification("Opponent has declined to play again");
+                    });
+                    break;
+                    
+                case ObjectWrapper.SERVER_OPPONENT_WAITING_RESPONSE:
+                    // Opponent is waiting for your response - show notification
+                    Platform.runLater(() -> {
+                        showNotification("Opponent is waiting for your response...");
+                        // Dialog remains open so user can still choose
+                    });
+                    break;
+                    
+                case ObjectWrapper.SERVER_OPPONENT_DECLINED_PLAY_AGAIN:
+                    // Opponent declined - close dialog immediately and show notification
+                    Platform.runLater(() -> {
+                        if (currentPlayAgainDialog != null) {
+                            try {
+                                currentPlayAgainDialog.close();
+                            } catch (Exception e) {
+                                // Ignore
+                            }
+                            currentPlayAgainDialog = null;
+                        }
+                        waitingForPlayAgainResponse = false;
+                        showNotification("Opponent has declined to play again");
                     });
                     break;
                     
@@ -170,11 +222,13 @@ public class ResultFrm  {
         
         Platform.runLater(() -> {
             // Create custom dialog
-            Dialog<ButtonType> playAgainDialog = new Dialog<>();
-            playAgainDialog.initOwner(stage); // Căn giữa theo stage
-            playAgainDialog.initModality(Modality.APPLICATION_MODAL);
-            playAgainDialog.initStyle(StageStyle.TRANSPARENT);
-            playAgainDialog.setTitle("Play Again");
+            currentPlayAgainDialog = new Dialog<>();
+            currentPlayAgainDialog.initOwner(stage); // Căn giữa theo stage
+            currentPlayAgainDialog.initModality(Modality.APPLICATION_MODAL);
+            currentPlayAgainDialog.initStyle(StageStyle.TRANSPARENT);
+            currentPlayAgainDialog.setTitle("Play Again");
+            
+            Dialog<ButtonType> playAgainDialog = currentPlayAgainDialog; // Local reference
             
             // Tạo container với nút X
             StackPane container = new StackPane();
@@ -241,6 +295,92 @@ public class ResultFrm  {
                     mySocket.sendData(new ObjectWrapper(ObjectWrapper.CLIENT_PLAY_AGAIN_RESPONSE, false));
                 }
             });
+        });
+    }
+    
+    private void showNotification(String message) {
+        Platform.runLater(() -> {
+            try {
+                // Tạo notification popup
+                Stage notificationStage = new Stage();
+                notificationStage.initStyle(StageStyle.UNDECORATED);
+                notificationStage.initModality(Modality.NONE);
+                notificationStage.initOwner(stage); // Căn giữa theo stage
+                
+                VBox content = new VBox(10);
+                content.setStyle("-fx-background-color: rgba(33, 150, 243, 0.95); -fx-background-radius: 10px; -fx-padding: 15px 20px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 3); -fx-background-insets: 0;");
+                
+                // Tạo HBox chứa nút X ở góc trên bên phải
+                HBox headerBox = new HBox();
+                headerBox.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                
+                // Nút X để đóng notification
+                Button closeButton = new Button("✕");
+                closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 0px 5px;");
+                closeButton.setOnAction(e -> {
+                    notificationStage.close();
+                });
+                
+                headerBox.getChildren().addAll(spacer, closeButton);
+                
+                Label messageLabel = new Label(message);
+                messageLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-wrap-text: true; -fx-background-color: transparent;");
+                messageLabel.setMaxWidth(300);
+                
+                VBox contentBox = new VBox(5);
+                contentBox.getChildren().addAll(headerBox, messageLabel);
+                
+                content.getChildren().add(contentBox);
+                
+                javafx.scene.Scene notificationScene = new javafx.scene.Scene(content);
+                notificationScene.setFill(Color.TRANSPARENT);
+                notificationStage.setScene(notificationScene);
+                
+                // Clip VBox để bo góc tròn
+                Rectangle clip = new Rectangle();
+                clip.setArcWidth(20);
+                clip.setArcHeight(20);
+                content.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
+                        clip.setWidth(newValue.getWidth());
+                        clip.setHeight(newValue.getHeight());
+                    }
+                });
+                Platform.runLater(() -> {
+                    double width = content.getBoundsInLocal().getWidth();
+                    double height = content.getBoundsInLocal().getHeight();
+                    if (width > 0 && height > 0) {
+                        clip.setWidth(width);
+                        clip.setHeight(height);
+                    } else {
+                        clip.setWidth(notificationScene.getWidth());
+                        clip.setHeight(notificationScene.getHeight());
+                    }
+                    content.setClip(clip);
+                });
+                
+                // Đặt vị trí ở góc trên bên phải
+                notificationStage.setX(stage.getX() + stage.getWidth() - 350);
+                notificationStage.setY(stage.getY() + 50);
+                
+                notificationStage.show();
+                
+                // Fade out và đóng sau 3 giây
+                FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), content);
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+                
+                Timeline closeTimer = new Timeline(new KeyFrame(Duration.seconds(3), e -> {
+                    fadeOut.play();
+                    fadeOut.setOnFinished(event -> notificationStage.close());
+                }));
+                closeTimer.play();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
     

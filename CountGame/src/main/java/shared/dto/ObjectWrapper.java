@@ -146,6 +146,10 @@ public class ObjectWrapper implements Serializable {
     public static final int SERVER_START_NEW_GAME = 70;
     // server thông báo một người từ chối, không chơi lại
     public static final int SERVER_PLAY_AGAIN_DECLINED = 71;
+    // server thông báo đối thủ đang chờ bạn đồng ý YES
+    public static final int SERVER_OPPONENT_WAITING_RESPONSE = 76;
+    // server thông báo đối thủ đã từ chối chơi lại
+    public static final int SERVER_OPPONENT_DECLINED_PLAY_AGAIN = 77;
     // server thông báo đang chờ đối thủ xác nhận play again
     public static final int SERVER_WAITING_OPPONENT_CONFIRM = 72;
     
