@@ -149,6 +149,35 @@ public class PlayerDAO extends DAO {
     }
 
     public boolean updateLoss(String username) {
+        String sql = "UPDATE players SET total_losses = total_losses + 1, points = points - 1 WHERE username = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, username);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Chỉ cộng điểm, không cộng total_wins (dùng khi đối thủ rời trận)
+    public boolean updatePointsOnly(String username, int pointsChange) {
+        String sql = "UPDATE players SET points = points + ? WHERE username = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, pointsChange);
+            ps.setString(2, username);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Chỉ tăng total_losses, không trừ điểm (dùng khi đã trừ điểm từ AFK)
+    public boolean updateLossOnly(String username) {
         String sql = "UPDATE players SET total_losses = total_losses + 1 WHERE username = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -159,7 +188,9 @@ public class PlayerDAO extends DAO {
             e.printStackTrace();
         }
         return false;
-    }    // Lấy thông tin người chơi
+    }
+    
+    // Lấy thông tin người chơi
 
     public PlayerHistory getPlayerInfo(String username) {
         PlayerHistory playerHistory = null;

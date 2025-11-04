@@ -275,14 +275,13 @@ public class ServerProcessing extends Thread {
                                 stopAllTimers();
                                 enemy.stopAllTimers();
                                 
-                                // Update AFK for the player who left (trừ 1 điểm)
+                                // Update AFK for the player who left (-1 điểm, total_afk + 1)
                                 playerDAO.updateAfk(this.username);
                                 
-                                // Cộng điểm cho người còn lại (thắng do đối thủ rời trận)
-                                playerDAO.updateWin(enemy.username);
+                                // Cộng điểm cho người còn lại (+1 điểm, KHÔNG cộng total_wins)
+                                playerDAO.updatePointsOnly(enemy.username, 1);
                                 
-                                // Update loss for the player who left
-                                playerDAO.updateLoss(this.username);
+                                // Không cập nhật loss cho người rời trận (vì AFK đã đủ)
                                 
                                 // Create match record - người còn lại cộng 1 điểm
                                 Match match = new Match(enemy.username, this.username, "win", "afk", 1, -1);
