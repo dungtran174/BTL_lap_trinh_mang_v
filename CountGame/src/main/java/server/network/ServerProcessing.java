@@ -61,10 +61,17 @@ public class ServerProcessing extends Thread {
 
     public void sendData(Object obj) {
         try {
-            oos.writeObject(obj);
-            oos.flush();
+            if (oos != null && mySocket != null && !mySocket.isClosed()) {
+                oos.writeObject(obj);
+                oos.flush();
+            } else {
+                System.err.println("Cannot send data: socket or output stream is null/closed for " + username);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error sending data to " + username + ": " + e.getMessage());
+            // Client disconnected, stop processing
+            isRunning = false;
+            isOnline = false;
         }
     }
 
@@ -463,15 +470,31 @@ public class ServerProcessing extends Thread {
         } finally {
             // Set offline status when client disconnects
             isOnline = false;
-            // Update waiting list
-            if (serverCtr != null) {
-                serverCtr.sendWaitingList();
+            // Update waiting list (but only if serverCtr is available and player was logged in)
+            try {
+                if (serverCtr != null) {
+                    serverCtr.sendWaitingList();
+                }
+            } catch (Exception e) {
+                System.err.println("Error updating waiting list on disconnect: " + e.getMessage());
             }
-            serverCtr.removeServerProcessing(this);
+            
+            try {
+                if (serverCtr != null) {
+                    serverCtr.removeServerProcessing(this);
+                }
+            } catch (Exception e) {
+                System.err.println("Error removing server processing: " + e.getMessage());
+            }
+            
             if (inGame && enemy != null) {
-                enemy.inGame = false;
-                enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISCONNECTED_CLIENT_ERROR));
-                enemy.enemy = null;
+                try {
+                    enemy.inGame = false;
+                    enemy.sendData(new ObjectWrapper(ObjectWrapper.SERVER_DISCONNECTED_CLIENT_ERROR));
+                    enemy.enemy = null;
+                } catch (Exception e) {
+                    System.err.println("Error notifying enemy on disconnect: " + e.getMessage());
+                }
             }
             closeSocket();
         }
@@ -503,6 +526,9 @@ public class ServerProcessing extends Thread {
     }
 
     public Player getPlayer() {
+        if (username == null || username.isEmpty()) {
+            return null;
+        }
         PlayerDAO playerDAO = new PlayerDAO();
         return playerDAO.getPlayer(username);
     }

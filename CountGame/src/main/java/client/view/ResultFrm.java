@@ -199,6 +199,12 @@ public class ResultFrm  {
                                 mySocket.setPoints(point);
                                 lblPointChange.setText("+1 POINT");
                             }
+                            else if(result.equals("draw")) {
+                                // Hòa: cộng 0.5 điểm (điểm sẽ được cập nhật từ server)
+                                // Không cập nhật điểm ở client vì điểm được lưu dưới dạng int
+                                // Điểm sẽ được cập nhật khi client refresh hoặc đăng nhập lại
+                                lblPointChange.setText("+0.5 POINT");
+                            }
                             else {
                                 // Không thắng: không cộng điểm
                                 lblPointChange.setText("+0 POINT");

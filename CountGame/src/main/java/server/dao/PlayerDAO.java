@@ -101,7 +101,10 @@ public class PlayerDAO extends DAO {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return String.valueOf(rs.getString("points"));
+                // Handle both INT and DECIMAL types - round to nearest int for display
+                double pointsValue = rs.getDouble("points");
+                int pointsRounded = (int) Math.round(pointsValue);
+                return String.valueOf(pointsRounded);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +126,7 @@ public class PlayerDAO extends DAO {
     }
 
     public boolean updateDraw(String username) {
-        String sql = "UPDATE players SET total_draw = total_draw + 1 WHERE username = ?";
+        String sql = "UPDATE players SET total_draw = total_draw + 1, points = points + 0.5 WHERE username = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, username);
@@ -200,7 +203,9 @@ public class PlayerDAO extends DAO {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                int points = rs.getInt("points");
+                // Handle both INT and DECIMAL types - round to nearest int for display
+                double pointsValue = rs.getDouble("points");
+                int points = (int) Math.round(pointsValue);
                 int totalWins = rs.getInt("total_wins");
                 int totalLosses = rs.getInt("total_losses");
                 int totalAfk = rs.getInt("total_afk");
@@ -243,7 +248,9 @@ public class PlayerDAO extends DAO {
             int rank = 1;
             while (rs.next()) {
                 String username = rs.getString("username");
-                int points = rs.getInt("points");
+                // Handle both INT and DECIMAL types - round to nearest int for display
+                double pointsValue = rs.getDouble("points");
+                int points = (int) Math.round(pointsValue);
                 int totalWins = rs.getInt("total_wins");
                 int totalLosses = rs.getInt("total_losses");
                 int totalAfk = rs.getInt("total_afk");

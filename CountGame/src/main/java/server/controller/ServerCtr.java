@@ -64,13 +64,21 @@ public class ServerCtr {
     public void addServerProcessing(ServerProcessing sp) {
         myProcess.add(sp);
         view.showMessage("Number of client connecting to the server: " + myProcess.size());
-        publicClientNumber();
+        try {
+            publicClientNumber();
+        } catch (Exception e) {
+            System.err.println("Error in publicClientNumber after adding client: " + e.getMessage());
+        }
     }
 
     public void removeServerProcessing(ServerProcessing sp) {
         myProcess.remove(sp);
         view.showMessage("Number of client connecting to the server: " + myProcess.size());
-        publicClientNumber();
+        try {
+            publicClientNumber();
+        } catch (Exception e) {
+            System.err.println("Error in publicClientNumber after removing client: " + e.getMessage());
+        }
     }
 
     public ServerMainFrm getView() {
@@ -88,7 +96,14 @@ public class ServerCtr {
     public void publicClientNumber() {
         ObjectWrapper data = new ObjectWrapper(ObjectWrapper.SERVER_INFORM_CLIENT_NUMBER, myProcess.size());
         for (ServerProcessing sp : myProcess) {
-            sp.sendData(data);
+            try {
+                if (sp != null && sp.isIsOnline()) {
+                    sp.sendData(data);
+                }
+            } catch (Exception e) {
+                System.err.println("Error sending client number to " + (sp != null ? sp.getUsername() : "unknown") + ": " + e.getMessage());
+                // Client may have disconnected, continue with next client
+            }
         }
     }
 
@@ -96,12 +111,13 @@ public class ServerCtr {
         ArrayList<Player> listUsername = new ArrayList<>();
         System.out.println("myProcess: " + myProcess.size());
         for (ServerProcessing sp : myProcess) {
-            if(sp.isIsOnline()){
+            if(sp != null && sp.isIsOnline()){
                 Player player = sp.getPlayer();
-                if(sp.isInGame()) player.setStatus("In game");
-                else player.setStatus("Online");
-                listUsername.add(player);
-
+                if (player != null) {
+                    if(sp.isInGame()) player.setStatus("In game");
+                    else player.setStatus("Online");
+                    listUsername.add(player);
+                }
             }
         }
         System.out.println("listUsername: " + listUsername.size());
@@ -110,11 +126,24 @@ public class ServerCtr {
         System.out.println(listUsername);
         ObjectWrapper data = new ObjectWrapper(ObjectWrapper.SERVER_INFORM_CLIENT_WAITING, listUsername);
         System.out.println(data);
+        
+        // Send waiting list to all online clients
         for (ServerProcessing sp : myProcess) {
-            sp.sendData(data);
-            System.out.println("Send to: " + sp.getPlayer().getUsername());
+            try {
+                if (sp != null && sp.isIsOnline()) {
+                    sp.sendData(data);
+                    Player player = sp.getPlayer();
+                    if (player != null) {
+                        System.out.println("Send to: " + player.getUsername());
+                    } else {
+                        System.out.println("Send to: " + sp.getUsername() + " (player object is null)");
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error sending waiting list to " + (sp != null ? (sp.getPlayer() != null ? sp.getPlayer().getUsername() : sp.getUsername()) : "unknown") + ": " + e.getMessage());
+                // Client may have disconnected, continue with next client
+            }
         }
-
     }
 
 }
